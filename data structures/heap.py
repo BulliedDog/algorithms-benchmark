@@ -1,5 +1,4 @@
 class heap:
-
     def __init__(self,type):
         self.array = []
         self.type = type
