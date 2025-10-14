@@ -17,7 +17,7 @@ class heap:
             self.array[basket] = tmp
             self._heapify(basket)
 
-    def extract(self, index): # estrae il massimo/minimo
+    def extract(self): # estrae il massimo/minimo
         if len(self.array) < 1:
             return None
         basket = self.array[0] # basket contiene o il max o il min
@@ -39,5 +39,5 @@ class heap:
             parent = (i - 1) // 2
 
     def insert(self, value):
-        self.array.append((-9999999 if self.type == "max" else 9999999))
-        self.changeValue(len(self.array) - 1, value)
+        self.array.append(value)
+        self.incDecValue(len(self.array) - 1, value)
