@@ -26,7 +26,7 @@ class heap:
         self._heapify(0)
         return basket
     
-    def changeValue(self, i, value): # incrementa/diminuisce il valore a seconda del tipo di heap
+    def incDecValue(self, i, value): # incrementa/diminuisce il valore a seconda del tipo di heap
         if (value < self.array[i] if self.type == "max" else value > self.array[i]):
             return False # se il tipo è max/min il valore deve per forza essere maggiore/minore o uguale rispettivamente
         self.array[i] = value

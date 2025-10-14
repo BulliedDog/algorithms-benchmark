@@ -14,7 +14,7 @@ class linkedList:
             lastNode.next = node
         self.size += 1
     
-    def _getLast(self, i=0):
+    def _getLast(self):
         if self.size == 0:
             return None
         lastNode = self.root
@@ -31,19 +31,27 @@ class linkedList:
             i -= 1
         return targetNode
         
-    ### TODO: FIX THE EXTRACTION, YOU ARE ONLY RETURNING A REFERENCE
     def extract(self): # estrae il massimo o il minimo
         if self.size == 0:
             return None
+        predecessorTargetNode = None
         targetNode = self.root # nodo di appoggio max o min
+        predecessorNode = None
         node = targetNode.next
         while node is not None:
             if (node.value > targetNode.value if self.type == "max" else node.value < targetNode.value):
+                predecessorTargetNode = predecessorNode
                 targetNode = node
+            predecessorNode = node
+            node = node.next
+        if predecessorTargetNode is not None:
+            predecessorTargetNode.next = targetNode.next
+        else:
+            self.root = targetNode.next
         self.size -= 1
-        return node
+        return targetNode
     
-    def changeValue(self, i, value):
+    def incDecValue(self, i, value): # non necessita alcun controllo sui valori (maggiore dell'attuale se max, minore se min) perché è disordinata la lista
         if i < 0:
             return False
         targetNode = self._getNode(i)
