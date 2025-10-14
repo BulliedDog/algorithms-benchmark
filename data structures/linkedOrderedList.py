@@ -8,12 +8,16 @@ class linkeOrderedList:
         if self.size == 0:
             self.root = node
         else:
-            lastNode = self._getLast()
-            if lastNode is None:
-                return False
-            lastNode.next = node
+            predecessorNode = self._getPredecessor()
+            predecessorNode.next = node
         self.size += 1
     
+    def _getPredecessor(self, value): # serve a cercare l'ultimo nodo più grande/piccolo di quello da inserire
+        predecessorNode = self.root
+        while predecessorNode.next is not None and (value < predecessorNode.next.value if self.type == "max" else value > predecessorNode.next.value):
+            predecessorNode = predecessorNode.next
+        return predecessorNode
+    ### TODO: COPIED, CHECK IF NECESSARY OR MODIFY TO ADAPT
     def _getLast(self, i=0):
         if self.size == 0:
             return None
@@ -22,6 +26,7 @@ class linkeOrderedList:
             lastNode = lastNode.next
         return lastNode
     
+    ### TODO: MAKE IT POSSIBLE THAT THE NODE GETS POPPED AND THE LIST REORDERS ITSELF
     def _getNode(self, i):
         if self.size == 0:
             return None
@@ -43,6 +48,9 @@ class linkeOrderedList:
         self.size -= 1
         return node
     
+    def _popNode(self, predecessorNode, node):
+
+    ### TODO: ADAPT
     def changeValue(self, i, value):
         if i < 0:
             return False

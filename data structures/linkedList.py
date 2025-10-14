@@ -31,7 +31,7 @@ class linkedList:
             i -= 1
         return targetNode
         
-
+    ### TODO: FIX THE EXTRACTION, YOU ARE ONLY RETURNING A REFERENCE
     def extract(self): # estrae il massimo o il minimo
         if self.size == 0:
             return None
