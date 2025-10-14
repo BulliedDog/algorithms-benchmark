@@ -21,8 +21,8 @@ class heap:
         if len(self.array) < 1:
             return None
         basket = self.array[0] # basket contiene o il max o il min
-        self.array[0] = self.array[len(self.array) - 1]
-        self.array[len(self.array) - 1] = None
+        self.array[0] = self.array[-1] # mette come valore finale il primo elemento (max/min) già copiato
+        self.array.pop() # elimina l'elemento all'ultima posizione che sarebbe l'elemento massimo dopo lo scabio della riga sopra
         self._heapify(0)
         return basket
     
@@ -30,19 +30,14 @@ class heap:
         if (value < self.array[i] if self.type == "max" else value > self.array[i]):
             return False # se il tipo è max/min il valore deve per forza essere maggiore/minore o uguale rispettivamente
         self.array[i] = value
-        if i % 2 != 0:  # se i % 2 = 0.5 allora il padre ha parte intera inferiore di i / 2, se è zero il padre è i / 2 - 1
-            parent = i // 2
-        else:
-            parent = i / 2 - 1 # in questo caso il figlio è destro, la divisione per 2 e basta porterebbe al padre sbagliato
-        while i > 1 and (self.array[parent] < self.array[i] if self.type == "max" else self.array[parent] > self.array[i]):
+        parent = (i - 1) // 2
+        while i > 0 and (self.array[parent] < self.array[i] if self.type == "max" else self.array[parent] > self.array[i]):
             tmp = self.array[parent]
             self.array[parent] = self.array[i]
-            self.array[i] = self.array[parent]
+            self.array[i] = tmp
             i = parent
-            if i % 2 != 0:  # se i % 2 = 0.5 allora il padre ha parte intera inferiore di i / 2, se è zero il padre è i / 2 - 1
-                parent = i // 2 # divisione con parte intera inferiore
-            else:
-                parent = i / 2 - 1 # in questo caso il figlio è destro, la divisione per 2 e basta porterebbe al padre sbagliato
+            parent = (i - 1) // 2
+
     def insert(self, value):
         self.array.append((-9999999 if self.type == "max" else 9999999))
         self.changeValue(len(self.array) - 1, value)

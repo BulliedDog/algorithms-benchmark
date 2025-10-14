@@ -1,4 +1,4 @@
-class linkedList:
+class linkeOrderedList:
     def __init__(self, type):
         self.root = None
         self.size = 0
