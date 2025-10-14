@@ -17,38 +17,16 @@ class linkeOrderedList:
         while predecessorNode.next is not None and (value < predecessorNode.next.value if self.type == "max" else value > predecessorNode.next.value):
             predecessorNode = predecessorNode.next
         return predecessorNode
-    ### TODO: COPIED, CHECK IF NECESSARY OR MODIFY TO ADAPT
-    def _getLast(self, i=0):
-        if self.size == 0:
-            return None
-        lastNode = self.root
-        while lastNode.next is not None:
-            lastNode = lastNode.next
-        return lastNode
-    
-    ### TODO: MAKE IT POSSIBLE THAT THE NODE GETS POPPED AND THE LIST REORDERS ITSELF
-    def _getNode(self, i):
+
+    def extract(self): # estrae il massimo o il minimo che sarà sempre il primo elemento poiché la lista è ordinata
         if self.size == 0:
             return None
         targetNode = self.root
-        while targetNode is not None and i > 0:
-            targetNode = targetNode.next
-            i -= 1
-        return targetNode
-        
-
-    def extract(self): # estrae il massimo o il minimo
-        if self.size == 0:
-            return None
-        targetNode = self.root # nodo di appoggio max o min
-        node = targetNode.next
-        while node is not None:
-            if (node.value > targetNode.value if self.type == "max" else node.value < targetNode.value):
-                targetNode = node
-        self.size -= 1
-        return node
-    
-    def _popNode(self, predecessorNode, node):
+        if self.root.next is not None:
+            self.root = self.root.next
+        else:
+            self.root = None
+        return targetNode # estraendo il primo elemento la lista rimarrà sempre ordinata
 
     ### TODO: ADAPT
     def changeValue(self, i, value):
