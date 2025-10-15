@@ -1,11 +1,11 @@
-class linkedOrderedList:
+class LinkedOrderedList:
     def __init__(self, type):
         self.root = None
         self.size = 0
         self.type = type
         
     def insert(self, value):
-        node = node(value)
+        node = Node(value)
         if self.size == 0:
             self.root = node
         elif (node.value > self.root.value if self.type == "max" else node.value < self.root.value):
@@ -56,7 +56,7 @@ class linkedOrderedList:
             predecessorNewNode.next = node
         return True
 
-class node:
+class Node:
     def __init__(self, value):
         self.value = value
         self.next = None

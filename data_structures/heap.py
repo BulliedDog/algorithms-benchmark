@@ -1,8 +1,8 @@
-class heap:
+class Heap:
     def __init__(self,type):
         self.array = []
         self.type = type
-
+        self.size = 0
     def _heapify(self, i):
         l = i * 2 + 1 # figlio sinistro considerando i che parte da zero
         r = i * 2 + 2 # figlio destro
@@ -24,6 +24,7 @@ class heap:
         self.array[0] = self.array[-1] # mette come valore finale il primo elemento (max/min) già copiato
         self.array.pop() # elimina l'elemento all'ultima posizione che sarebbe l'elemento massimo dopo lo scabio della riga sopra
         self._heapify(0)
+        self.size -= 1
         return basket
     
     def incDecValue(self, i, value): # incrementa/diminuisce il valore a seconda del tipo di heap
@@ -38,9 +39,11 @@ class heap:
             i = parent
             parent = (i - 1) // 2
         return True
+    
     def insert(self, value):
         self.array.append(value)
         self.incDecValue(len(self.array) - 1, value)
+        self.size += 1
 
     def getValue(self, i: int) -> int:
         return self.array[i]

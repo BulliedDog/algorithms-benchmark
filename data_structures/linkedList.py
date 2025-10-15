@@ -1,11 +1,11 @@
-class linkedList:
+class LinkedList:
     def __init__(self, type):
         self.root = None
         self.size = 0
         self.type = type
         
     def insert(self, value):
-        node = node(value)
+        node = Node(value)
         if self.size == 0:
             self.root = node
         else:
@@ -61,7 +61,7 @@ class linkedList:
         targetNode.value = value
         return True
 
-class node:
+class Node:
     def __init__(self, value):
         self.value = value
         self.next = None
