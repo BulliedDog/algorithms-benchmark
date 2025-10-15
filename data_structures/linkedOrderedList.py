@@ -42,10 +42,11 @@ class LinkedOrderedList:
         while node is not None and i > 0:
             predecessorNode = node
             node = node.next
+            i -= 1
         if predecessorNode is not None:
-            predecessorNode.next = node.next  # remove node from current position
+            predecessorNode.next = node.next  # tolgo il nodo alla posizione corrente
         else:
-            self.root = node.next            # remove head
+            self.root = node.next # se il predecessore non c'è allora il nodo diventa il nuovo root
         node.value = value
         if self.root is None or (node.value > self.root.value if self.type == "max" else node.value < self.root.value):
             node.next = self.root

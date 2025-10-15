@@ -6,12 +6,10 @@ class LinkedList:
         
     def insert(self, value):
         node = Node(value)
-        if self.size == 0:
+        if self.size == 0 or self.root is None:
             self.root = node
         else:
             lastNode = self._getLast()
-            if lastNode is None:
-                return False
             lastNode.next = node
         self.size += 1
     
@@ -33,12 +31,12 @@ class LinkedList:
         return targetNode
         
     def extract(self): # estrae il massimo o il minimo
-        if self.size == 0:
+        if self.size == 0 or self.root is None:
             return None
         predecessorTargetNode = None
         targetNode = self.root # nodo di appoggio max o min
         predecessorNode = None
-        node = targetNode.next
+        node = self.root
         while node is not None:
             if (node.value > targetNode.value if self.type == "max" else node.value < targetNode.value):
                 predecessorTargetNode = predecessorNode
