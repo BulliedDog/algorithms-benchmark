@@ -4,7 +4,8 @@ class linkedList:
         self.size = 0
         self.type = type
         
-    def insert(self, node):
+    def insert(self, value):
+        node = node(value)
         if self.size == 0:
             self.root = node
         else:
@@ -52,7 +53,7 @@ class linkedList:
         return targetNode
     
     def incDecValue(self, i, value): # non necessita alcun controllo sui valori (maggiore dell'attuale se max, minore se min) perché è disordinata la lista
-        if i < 0:
+        if i < 0 or i >= self.size or self.size == 0:
             return False
         targetNode = self._getNode(i)
         if targetNode is None:

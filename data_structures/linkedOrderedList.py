@@ -4,7 +4,8 @@ class linkedOrderedList:
         self.size = 0
         self.type = type
         
-    def insert(self, node):
+    def insert(self, value):
+        node = node(value)
         if self.size == 0:
             self.root = node
         elif (node.value > self.root.value if self.type == "max" else node.value < self.root.value):

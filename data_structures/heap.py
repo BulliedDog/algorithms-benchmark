@@ -37,7 +37,10 @@ class heap:
             self.array[i] = tmp
             i = parent
             parent = (i - 1) // 2
-
+        return True
     def insert(self, value):
         self.array.append(value)
         self.incDecValue(len(self.array) - 1, value)
+
+    def getValue(self, i: int) -> int:
+        return self.array[i]
