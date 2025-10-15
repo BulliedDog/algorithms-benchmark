@@ -1,4 +1,6 @@
 import random, time
+from tabulate import tabulate
+import matplotlib.pyplot as plt
 from data_structures import *
 
 ### RANDOM NUMBER SET ###
@@ -9,7 +11,6 @@ numbers = random.sample(range(0, 10000), 1000)
 structures = {
     'maxHeap': Heap("max"),
     'minHeap': Heap("min"),
-
     'maxLinkedList': LinkedList("max"),
     'minLinkedList': LinkedList("min"),
     'maxLinkedOrderedList': LinkedOrderedList("max"),
@@ -19,11 +20,21 @@ structures = {
 
 ### OPERATIONS ###
 operations = ['Insert', 'IncDec', 'Extract']
+##################
 
+### TIMING LISTS ###
 timingLists = {
     f"{name}{op}Times": [] for name in structures for op in operations
 }
 
+sumTimingLists = {
+    f"{name}{op}Times": [] for name in structures for op in operations
+}
+
+meanTimingLists = {
+    f"{name}{op}Times": [] for name in structures for op in operations
+}
+####################
 ### insert ###
 print("Test insert:\n")
 i = 0
@@ -82,3 +93,27 @@ for n in numbers:
         else:
             print(f"{name} -> estratto nodo {(node if isinstance(node, int) else node.value)} iterazione = {i} in {elapsed}ms")
 ###############
+for op in operations:
+    for name, ds in structures.items():
+        prev = 0
+        for t in timingLists[f"{name}{op}Times"]:
+            current = t # copia per valore dato che int è una variabile immutabile
+            current += prev
+            prev = current
+            sumTimingLists[f"{name}{op}Times"].append(current)
+
+### GRAPHS AND PLOTTING ###
+plt.style.use("dark_background")
+for op in operations:
+    plt.figure(figsize=(10, 6))
+    for name in structures:
+        times = sumTimingLists[f"{name}{op}Times"]
+        plt.plot(times, label=f"{name} {op}")
+    plt.xlabel("Iterazioni")
+    plt.ylabel("Tempo (ms)")
+    plt.title(f"Tempi di {op} dati per ogni struttura")
+    plt.savefig(f"graphs/{name}{op}.png")
+    plt.get_current_fig_manager().set_window_title("{name}{op} Graph")
+    plt.legend()
+plt.show()
+############################
