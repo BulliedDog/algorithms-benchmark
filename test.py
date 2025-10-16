@@ -2,6 +2,7 @@ import random, time
 from tabulate import tabulate
 import matplotlib.pyplot as plt
 from data_structures import *
+import pandas as pd
 
 ### RANDOM NUMBER SET ###
 numbers = random.sample(range(0, 10000), 1000)
@@ -30,11 +31,8 @@ timingLists = {
 sumTimingLists = {
     f"{name}{op}Times": [] for name in structures for op in operations
 }
-
-meanTimingLists = {
-    f"{name}{op}Times": [] for name in structures for op in operations
-}
 ####################
+
 ### insert ###
 print("Test insert:\n")
 i = 0
@@ -93,6 +91,8 @@ for n in numbers:
         else:
             print(f"{name} -> estratto nodo {(node if isinstance(node, int) else node.value)} iterazione = {i} in {elapsed}ms")
 ###############
+
+### CALCULATING THE TOTAL TIME PER ITERATION ###
 for op in operations:
     for name, ds in structures.items():
         prev = 0
@@ -101,6 +101,12 @@ for op in operations:
             current += prev
             prev = current
             sumTimingLists[f"{name}{op}Times"].append(current)
+################################################
+
+### SAVING CSV FILES ###
+pd.DataFrame(timingLists).to_csv("tables/timingLists.csv", index=False)
+pd.DataFrame(sumTimingLists).to_csv("tables/sumTimingLists.csv", index=False)
+########################
 
 ### GRAPHS AND PLOTTING ###
 plt.style.use("dark_background")
@@ -112,8 +118,21 @@ for op in operations:
     plt.xlabel("Iterazioni")
     plt.ylabel("Tempo (ms)")
     plt.title(f"Tempi di {op} dati per ogni struttura")
-    plt.savefig(f"graphs/{name}{op}.png")
-    plt.get_current_fig_manager().set_window_title("{name}{op} Graph")
+    plt.savefig(f"graphs/{name}{op}TotalTimes.png")
+    plt.get_current_fig_manager().set_window_title(f"{name}{op} - Grafico Tempi Totali")
     plt.legend()
+
+for op in operations:
+    plt.figure(figsize=(10, 6))
+    for name in structures:
+        times = timingLists[f"{name}{op}Times"]
+        plt.bar(range(len(times)), times, label=f"{name} {op}", alpha=0.7, width=1)
+    plt.xlabel("Iterazioni")
+    plt.ylabel("Tempo (ms)")
+    plt.title(f"Tempi di {op} dati per ogni struttura")
+    plt.savefig(f"graphs/{name}{op}SingleTimes.png")
+    plt.get_current_fig_manager().set_window_title(f"{name}{op} Grafico Tempi Singoli")
+    plt.legend()
+
 plt.show()
 ############################
