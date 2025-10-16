@@ -5,7 +5,12 @@ from data_structures import *
 import pandas as pd
 
 ### RANDOM NUMBER SET ###
-numbers = random.sample(range(0, 10000), 1000)
+while True:
+    numberSetSize = int(input("Inserire il numero di dati randomici da testare [default = 1000]-> ") or 1000)
+    if numberSetSize > 0:
+        break
+numbers = random.sample(range(0, int(input("Inserire il valore massimo dei numeri [default = 1000]-> ") or 1000)), numberSetSize)
+numberIncDecLimit = int(input("Inserire il valore massimo di incremento/decremento [default = 1000]-> ") or 1000)
 #########################
 
 ### DATA STRUCTURES ###
@@ -55,15 +60,15 @@ i = 0
 for n in numbers:
     for name, ds in structures.items():
         i += 1
-        randomIndex = random.randrange(0, ds.size - 1)
-        randomValue = random.randrange(0, 1000)
+        randomIndex = random.randrange(0, numberSetSize)
+        randomValue = random.randrange(0, numberIncDecLimit)
         if name[3:7] == "Heap":
             value = ds.getValue(randomIndex)
             if name[0:3] == "max":
                 value += randomValue
             else:
                 value -= randomValue
-        else: 
+        else:
             value = randomValue
         start = time.time()
         flag = ds.incDecValue(randomIndex, value)
@@ -103,9 +108,28 @@ for op in operations:
             sumTimingLists[f"{name}{op}Times"].append(current)
 ################################################
 
-### SAVING CSV FILES ###
-pd.DataFrame(timingLists).to_csv("tables/timingLists.csv", index=False)
-pd.DataFrame(sumTimingLists).to_csv("tables/sumTimingLists.csv", index=False)
+### SAVING CSV FILE ###
+# IN THE "timingLists_combaned.csv" file, format is the following #
+# LEFT TABLE -> SINGLE TIME TABLE # 
+# RIGHT TABLE -> SUM TIME TABLE #
+timing_df = pd.DataFrame(timingLists)
+sum_timing_df = pd.DataFrame(sumTimingLists)
+
+max_len = max(len(timing_df), len(sum_timing_df))
+timing_df = timing_df.reindex(range(max_len))
+sum_timing_df = sum_timing_df.reindex(range(max_len))
+
+timing_df.insert(0, "Iteration", range(1, max_len + 1))
+sum_timing_df.insert(0, "Iteration", range(1, max_len + 1))
+
+blank_col = pd.Series([""] * max_len, name="")
+
+combined_df = pd.concat(
+    [timing_df, blank_col, sum_timing_df.drop(columns="Iteration")],
+    axis=1
+)
+
+combined_df.to_csv("tables/timingLists_combined.csv", index=False)
 ########################
 
 ### GRAPHS AND PLOTTING ###
@@ -118,9 +142,9 @@ for op in operations:
     plt.xlabel("Iterazioni")
     plt.ylabel("Tempo (ms)")
     plt.title(f"Tempi di {op} dati per ogni struttura")
-    plt.savefig(f"graphs/{name}{op}TotalTimes.png")
-    plt.get_current_fig_manager().set_window_title(f"{name}{op} - Grafico Tempi Totali")
     plt.legend()
+    plt.savefig(f"graphs/{name}{op}TotalTimes.png")
+    plt.get_current_fig_manager().set_window_title(f"Grafico Tempi Totali")
 
 for op in operations:
     plt.figure(figsize=(10, 6))
@@ -130,9 +154,9 @@ for op in operations:
     plt.xlabel("Iterazioni")
     plt.ylabel("Tempo (ms)")
     plt.title(f"Tempi di {op} dati per ogni struttura")
-    plt.savefig(f"graphs/{name}{op}SingleTimes.png")
-    plt.get_current_fig_manager().set_window_title(f"{name}{op} Grafico Tempi Singoli")
     plt.legend()
+    plt.savefig(f"graphs/{name}{op}SingleTimes.png")
+    plt.get_current_fig_manager().set_window_title(f"Grafico Tempi Singoli")
 
 plt.show()
 ############################
