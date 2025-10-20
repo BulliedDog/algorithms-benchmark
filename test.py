@@ -1,16 +1,22 @@
 import random, time
-from tabulate import tabulate
 import matplotlib.pyplot as plt
 from data_structures import *
 import pandas as pd
 
 ### RANDOM NUMBER SET ###
 while True:
-    numberSetSize = int(input("Inserire il numero di dati randomici da testare [default = 1000]-> ") or 1000)
+    numberSetSize = int(input("Inserire il numero di dati randomici da testare [default = 500]-> ") or 500)
     if numberSetSize > 0:
         break
-numbers = random.sample(range(0, int(input("Inserire il valore massimo dei numeri [default = 1000]-> ") or 1000)), numberSetSize)
-numberIncDecLimit = int(input("Inserire il valore massimo di incremento/decremento [default = 1000]-> ") or 1000)
+while True:
+    maxValue = int(input("Inserire il valore massimo dei numeri [default = 500]-> ") or 500)
+    if maxValue > 0:
+        break
+numbers = random.sample(range(0, maxValue), numberSetSize)
+while True:
+    numberIncDecLimit = int(input("Inserire il valore massimo di incremento/decremento [default = 500]-> ") or 500)
+    if numberIncDecLimit > 0:
+        break
 #########################
 
 ### DATA STRUCTURES ###
@@ -34,6 +40,10 @@ timingLists = {
 }
 
 sumTimingLists = {
+    f"{name}{op}Times": [] for name in structures for op in operations
+}
+
+meanTimingLists = {
     f"{name}{op}Times": [] for name in structures for op in operations
 }
 ####################
@@ -108,8 +118,22 @@ for op in operations:
             sumTimingLists[f"{name}{op}Times"].append(current)
 ################################################
 
+### CALCULATING MEAN CUMULATIVE TIME PER ITERATION ###
+for op in operations:
+    for name in structures:
+        sums = sumTimingLists[f"{name}{op}Times"]
+        mean_list = meanTimingLists[f"{name}{op}Times"]
+        for id in range(0, len(sums)):  # id = 0..N-1
+            S = sums[id]
+            if id > 0:
+                for x in range(0, id):
+                    S += sums[x]
+            n = id + 1
+            mean = S / n
+            mean_list.append(mean)
+######################################################
+
 ### SAVING CSV FILE ###
-# IN THE "timingLists_combaned.csv" file, format is the following #
 # LEFT TABLE -> SINGLE TIME TABLE # 
 # RIGHT TABLE -> SUM TIME TABLE #
 timing_df = pd.DataFrame(timingLists)
@@ -134,6 +158,19 @@ combined_df.to_csv("tables/timingLists_combined.csv", index=False)
 
 ### GRAPHS AND PLOTTING ###
 plt.style.use("dark_background")
+
+for op in operations:
+    plt.figure(figsize=(10, 6))
+    for name in structures:
+        times = meanTimingLists[f"{name}{op}Times"]
+        plt.plot(times, label=f"{name} {op}")
+    plt.xlabel("Iterazioni")
+    plt.ylabel("Tempo (ms)")
+    plt.title(f"Tempi medi totali di {op} dati per ogni struttura")
+    plt.legend()
+    plt.savefig(f"graphs/{op}MeanTimes.png")
+    plt.get_current_fig_manager().set_window_title(f"Grafico Tempi Medi")
+
 for op in operations:
     plt.figure(figsize=(10, 6))
     for name in structures:
@@ -141,10 +178,11 @@ for op in operations:
         plt.plot(times, label=f"{name} {op}")
     plt.xlabel("Iterazioni")
     plt.ylabel("Tempo (ms)")
-    plt.title(f"Tempi di {op} dati per ogni struttura")
+    plt.title(f"Tempi totali di {op} dati per ogni struttura")
     plt.legend()
-    plt.savefig(f"graphs/{name}{op}TotalTimes.png")
+    plt.savefig(f"graphs/{op}TotalTimes.png")
     plt.get_current_fig_manager().set_window_title(f"Grafico Tempi Totali")
+
 
 for op in operations:
     plt.figure(figsize=(10, 6))
@@ -153,9 +191,9 @@ for op in operations:
         plt.bar(range(len(times)), times, label=f"{name} {op}", alpha=0.7, width=1)
     plt.xlabel("Iterazioni")
     plt.ylabel("Tempo (ms)")
-    plt.title(f"Tempi di {op} dati per ogni struttura")
+    plt.title(f"Tempi singoli di {op} dati per ogni struttura")
     plt.legend()
-    plt.savefig(f"graphs/{name}{op}SingleTimes.png")
+    plt.savefig(f"graphs/{op}SingleTimes.png")
     plt.get_current_fig_manager().set_window_title(f"Grafico Tempi Singoli")
 
 plt.show()
