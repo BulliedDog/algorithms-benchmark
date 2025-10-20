@@ -18,7 +18,7 @@ while True:
     if numberIncDecLimit > 0:
         break
 #########################
-
+ 
 ### DATA STRUCTURES ###
 structures = {
     'maxHeap': Heap("max"),
