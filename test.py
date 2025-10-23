@@ -1,5 +1,6 @@
-import random, time
+import random, gc
 import matplotlib.pyplot as plt
+from time import perf_counter as now
 from data_structures import *
 import pandas as pd
 
@@ -54,9 +55,11 @@ i = 0
 for n in numbers:
     for name, ds in structures.items():
         i += 1
-        start = time.time()
+        gc.disable()
+        start = now()
         flag = ds.insert(n)
-        end = time.time()
+        end = now()
+        gc.enable()
         elapsed = (end - start) * 1000 # s * 1000 = ms
         timingLists[f"{name}InsertTimes"].append(elapsed)
         if flag == False:
@@ -80,9 +83,11 @@ for n in numbers:
                 value -= randomValue
         else:
             value = randomValue
-        start = time.time()
+        gc.disable()
+        start = now()
         flag = ds.incDecValue(randomIndex, value)
-        end = time.time()
+        end = now()
+        gc.enable()
         if flag == False:
             raise Exception(f"{name} -> errore (iterazione {i} nell'indice {randomIndex} fuori range, dimensione[{ds.size}] o struttura vuota!")
         elapsed = (end - start) * 1000 # ms * 1000 = ms
@@ -96,9 +101,11 @@ i = 0
 for n in numbers:
     for name,ds in structures.items():
         i += 1
-        start = time.time()
+        gc.disable()
+        start = now()
         node = ds.extract()
-        end = time.time()
+        end = now()
+        gc.enable()
         elapsed = (end - start) * 1000 # ms * 1000 = ms
         timingLists[f"{name}ExtractTimes"].append(elapsed)
         if node is None:
@@ -158,9 +165,9 @@ combined_df.to_csv("tables/timingLists_combined.csv", index=False)
 
 ### GRAPHS AND PLOTTING ###
 plt.style.use("dark_background")
-
 for op in operations:
     plt.figure(figsize=(10, 6))
+    plt.grid(True)
     for name in structures:
         times = meanTimingLists[f"{name}{op}Times"]
         plt.plot(times, label=f"{name} {op}")
@@ -173,6 +180,7 @@ for op in operations:
 
 for op in operations:
     plt.figure(figsize=(10, 6))
+    plt.grid(True)
     for name in structures:
         times = sumTimingLists[f"{name}{op}Times"]
         plt.plot(times, label=f"{name} {op}")
@@ -186,6 +194,7 @@ for op in operations:
 
 for op in operations:
     plt.figure(figsize=(10, 6))
+    plt.grid(True)
     for name in structures:
         times = timingLists[f"{name}{op}Times"]
         plt.bar(range(len(times)), times, label=f"{name} {op}", alpha=0.7, width=1)
@@ -197,4 +206,4 @@ for op in operations:
     plt.get_current_fig_manager().set_window_title(f"Grafico Tempi Singoli")
 
 plt.show()
-############################
+##################+##########
