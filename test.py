@@ -206,4 +206,4 @@ for op in operations:
     plt.get_current_fig_manager().set_window_title(f"Grafico Tempi Singoli")
 
 plt.show()
-##################+##########
+#############################
