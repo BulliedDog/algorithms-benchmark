@@ -14,7 +14,6 @@ maxValue = 10000
 numberIncDecLimit = maxValue # volendo modificabile
 
 # DATA STRUCTURES #
-# Example 'minLinkedList500'
 structures = {
     f'[variation->{v}][structure->{s}][dimension->{d}][iteration->{i}]': constructors[s](v,d,i) for v in variations for s in structureNames for d in numberSetSize for i in range(1, numberOfIterations + 1) 
 }
@@ -74,7 +73,6 @@ for name, ds in structures.items():
         elapsed += (end - start) * 1000
     timingLists[f"{ds.type}{ds.name}{ds.plannedSize}IncDec"].append(elapsed)
     print(f"{name} => cambiato valore di {ds.plannedSize} elementi in {elapsed}ms")
-###################
 
 ### extract ###
 print("Raccolta tempi extract valori max/min:\n")
@@ -91,7 +89,6 @@ for name,ds in structures.items():
         elapsed += (end - start) * 1000 # ms * 1000 = ms
     timingLists[f"{ds.type}{ds.name}{ds.plannedSize}Extract"].append(elapsed)
     print(f"{name} => estratti {ds.plannedSize} elementi {ds.type} in {elapsed}ms")
-###############
 
 for v in variations:
     for s in structureNames:
@@ -102,6 +99,7 @@ for v in variations:
                     mean += time
                 mean /= len(timingLists[f"{v}{s}{d}{op}"])
                 meanTimingLists[f"{v}{s}{op}"].append(mean)
+
 # GRAPH PLOTTING #
 plt.style.use('dark_background')
 for op in operations:
@@ -120,3 +118,25 @@ for op in operations:
     plt.grid(False)
     plt.savefig(f"graphs/{op.lower()}_timing_plot.png", facecolor='black', bbox_inches='tight')
 plt.show()
+
+# TABELLA TEMPI ITERAZIONI #
+rows = []
+for name, time in timingLists.items():
+    rows.append({
+        "Tipo di struttura \n[variazione][struttura][dimensione][operazione]": name,
+        **{f"Tempo (ms) iterazione {i+1}": t for i, t in enumerate(time)}
+    })
+df = pd.DataFrame(rows)
+df.set_index("Tipo di struttura \n[variazione][struttura][dimensione][operazione]")
+df.to_csv("tables/tabella_tempi_iterazioni.csv")
+
+# TABELLA TEMPI MEDI #
+rows = []
+for name, time in meanTimingLists.items():
+    rows.append({
+        "Tipo struttura \n[variazione][struttura][operazione]": name,
+        **{f"Dimensione dataset {numberSetSize[i]}": t for i, t in enumerate(time)}
+    })
+df = pd.DataFrame(rows)
+df.set_index("Tipo di struttura \n[variazione][struttura][operazione]")
+df.to_csv("tables/tabella_tempi_medi.csv")
