@@ -1,8 +1,11 @@
 class Heap:
-    def __init__(self,type: str):
+    def __init__(self, type: str, plannedSize: int, iteration: int):
         self.array = []
         self.type = type
         self.size = 0
+        self.name = "Heap"
+        self.iteration = iteration
+        self.plannedSize = plannedSize
     def _heapify(self, i: int):
         l = i * 2 + 1 # figlio sinistro considerando i che parte da zero
         r = i * 2 + 2 # figlio destro

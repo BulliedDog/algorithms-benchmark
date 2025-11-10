@@ -1,9 +1,12 @@
 class LinkedList:
-    def __init__(self, type):
+    def __init__(self, type: str, plannedSize: int, iteration: int):
         self.root = None
         self.size = 0
         self.type = type
-        
+        self.name = "LinkedList"
+        self.iteration = iteration
+        self.plannedSize = plannedSize
+
     def insert(self, value):
         node = Node(value)
         if self.size == 0 or self.root is None:

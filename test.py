@@ -3,81 +3,62 @@ import matplotlib.pyplot as plt
 from time import perf_counter as now
 from data_structures import *
 import pandas as pd
+# NUMBER SET SIZES
+numberOfIterations = 50 # for each number set size
+numberSetSize = [100,200,500,1000,2000]
+structureNames = ["Heap", "LinkedList", "LinkedOrderedList"]
+constructors = {"Heap": Heap, "LinkedList": LinkedList, "LinkedOrderedList": LinkedOrderedList}
+variations = ["max", "min"]
+operations = ['Insert', 'IncDec', 'Extract'] #TODO: AGGIUNGERE ANCHE IMPLEMENTAZIONE RICERCA
+maxValue = 10000
+numberIncDecLimit = maxValue # volendo modificabile
 
-### RANDOM NUMBER SET ###
-while True:
-    numberSetSize = int(input("Inserire il numero di dati randomici da testare [default = 500]-> ") or 500)
-    if numberSetSize > 0:
-        break
-while True:
-    maxValue = int(input("Inserire il valore massimo dei numeri [default = 500]-> ") or 500)
-    if maxValue > 0:
-        break
-numbers = random.sample(range(0, maxValue), numberSetSize)
-while True:
-    numberIncDecLimit = int(input("Inserire il valore massimo di incremento/decremento [default = 500]-> ") or 500)
-    if numberIncDecLimit > 0:
-        break
-#########################
- 
-### DATA STRUCTURES ###
+# DATA STRUCTURES #
+# Example 'minLinkedList500'
 structures = {
-    'maxHeap': Heap("max"),
-    'minHeap': Heap("min"),
-    'maxLinkedList': LinkedList("max"),
-    'minLinkedList': LinkedList("min"),
-    'maxLinkedOrderedList': LinkedOrderedList("max"),
-    'minLinkedOrderedList': LinkedOrderedList("min"),
+    f'[variation->{v}][structure->{s}][dimension->{d}][iteration->{i}]': constructors[s](v,d,i) for v in variations for s in structureNames for d in numberSetSize for i in range(1, numberOfIterations + 1) 
 }
-#######################
 
-### OPERATIONS ###
-operations = ['Insert', 'IncDec', 'Extract']
-##################
+# RANDOM NUMBERS DATASETS PER DIMENSION - all random #
+numbers = {
+    f'{name}': random.sample(range(0, maxValue), ds.plannedSize) for name, ds in structures.items()
+}
 
-### TIMING LISTS ###
+# TIMING LISTS #
 timingLists = {
-    f"{name}{op}Times": [] for name in structures for op in operations
+    f'{v}{s}{d}{op}': [] for v in variations for s in structureNames for op in operations for d in numberSetSize # appende un tempo per ogni iterazione
 }
 
-sumTimingLists = {
-    f"{name}{op}Times": [] for name in structures for op in operations
-}
-
+# MEDIA TEMPI PER OPERAZIONE
 meanTimingLists = {
-    f"{name}{op}Times": [] for name in structures for op in operations
+    f"{v}{s}{op}": [] for v in variations for s in structureNames for op in operations
 }
-####################
 
-### insert ###
-print("Test insert:\n")
-i = 0
-for n in numbers:
-    for name, ds in structures.items():
-        i += 1
+# INSERT #
+print("Raccolta tempi insert:\n")
+for name, ds in structures.items():
+    elapsed = 0
+    for n in numbers[f"{name}"]:
         gc.disable()
         start = now()
-        flag = ds.insert(n)
+        ds.insert(n)
         end = now()
         gc.enable()
-        elapsed = (end - start) * 1000 # s * 1000 = ms
-        timingLists[f"{name}InsertTimes"].append(elapsed)
-        if flag == False:
-            raise(Exception(f""))
-        print(f"{name} -> inserito valore = {n} iterazione = {i} in {elapsed}ms")
-##############
+        elapsed += (end - start) * 1000 # ms * 1000 = ms
+    #TODO: aggiungere chiamata a funzione check di ordinamento della heap e ordered linke list
+    timingLists[f"{ds.type}{ds.name}{ds.plannedSize}Insert"].append(elapsed)
+    print(f"{name} => inseriti {len(numbers[f"{name}"])} elementi in {elapsed}ms")
 
-### incDecValue ###
-print("Test inc/dec valore:\n")
-i = 0
-for n in numbers:
-    for name, ds in structures.items():
-        i += 1
-        randomIndex = random.randrange(0, numberSetSize)
-        randomValue = random.randrange(0, numberIncDecLimit)
-        if name[3:7] == "Heap":
+# INCDEC VALORE #
+print("Raccolta tempi inc/dec valore:\n")
+for name, ds in structures.items():
+    elapsed = 0
+    for i in range(ds.size):
+        randomIndex = random.randrange(ds.size)
+        randomValue = random.randrange(0, numberIncDecLimit + 1)
+        if ds.name == "Heap":
             value = ds.getValue(randomIndex)
-            if name[0:3] == "max":
+            if ds.type == "max":
                 value += randomValue
             else:
                 value -= randomValue
@@ -90,120 +71,52 @@ for n in numbers:
         gc.enable()
         if flag == False:
             raise Exception(f"{name} -> errore (iterazione {i} nell'indice {randomIndex} fuori range, dimensione[{ds.size}] o struttura vuota!")
-        elapsed = (end - start) * 1000 # ms * 1000 = ms
-        timingLists[f"{name}IncDecTimes"].append(elapsed)
-        print(f"{name} -> cambiato valore = {value} iterazione = {i} in {elapsed}ms")
+        elapsed += (end - start) * 1000
+    timingLists[f"{ds.type}{ds.name}{ds.plannedSize}IncDec"].append(elapsed)
+    print(f"{name} => cambiato valore di {ds.plannedSize} elementi in {elapsed}ms")
 ###################
 
 ### extract ###
-print("Test extract valori max/min:\n")
-i = 0
-for n in numbers:
-    for name,ds in structures.items():
-        i += 1
+print("Raccolta tempi extract valori max/min:\n")
+for name,ds in structures.items():
+    elapsed = 0
+    for i in range(ds.plannedSize):
         gc.disable()
         start = now()
         node = ds.extract()
         end = now()
         gc.enable()
-        elapsed = (end - start) * 1000 # ms * 1000 = ms
-        timingLists[f"{name}ExtractTimes"].append(elapsed)
         if node is None:
             raise Exception(f"{name} -> errore durante l'estrazione {i}, la struttura è vuota!")
-        else:
-            print(f"{name} -> estratto nodo {(node if isinstance(node, int) else node.value)} iterazione = {i} in {elapsed}ms")
+        elapsed += (end - start) * 1000 # ms * 1000 = ms
+    timingLists[f"{ds.type}{ds.name}{ds.plannedSize}Extract"].append(elapsed)
+    print(f"{name} => estratti {ds.plannedSize} elementi {ds.type} in {elapsed}ms")
 ###############
 
-### CALCULATING THE TOTAL TIME PER ITERATION ###
+for v in variations:
+    for s in structureNames:
+        for op in operations:
+            for d in numberSetSize:
+                mean = 0
+                for time in timingLists[f"{v}{s}{d}{op}"]:
+                    mean += time
+                mean /= len(timingLists[f"{v}{s}{d}{op}"])
+                meanTimingLists[f"{v}{s}{op}"].append(mean)
+# GRAPH PLOTTING #
+plt.style.use('dark_background')
 for op in operations:
-    for name, ds in structures.items():
-        prev = 0
-        for t in timingLists[f"{name}{op}Times"]:
-            current = t # copia per valore dato che int è una variabile immutabile
-            current += prev
-            prev = current
-            sumTimingLists[f"{name}{op}Times"].append(current)
-################################################
-
-### CALCULATING MEAN CUMULATIVE TIME PER ITERATION ###
-for op in operations:
-    for name in structures:
-        sums = sumTimingLists[f"{name}{op}Times"]
-        mean_list = meanTimingLists[f"{name}{op}Times"]
-        for id in range(0, len(sums)):  # id = 0..N-1
-            S = sums[id]
-            if id > 0:
-                for x in range(0, id):
-                    S += sums[x]
-            n = id + 1
-            mean = S / n
-            mean_list.append(mean)
-######################################################
-
-### SAVING CSV FILE ###
-# LEFT TABLE -> SINGLE TIME TABLE # 
-# RIGHT TABLE -> SUM TIME TABLE #
-timing_df = pd.DataFrame(timingLists)
-sum_timing_df = pd.DataFrame(sumTimingLists)
-
-max_len = max(len(timing_df), len(sum_timing_df))
-timing_df = timing_df.reindex(range(max_len))
-sum_timing_df = sum_timing_df.reindex(range(max_len))
-
-timing_df.insert(0, "Iteration", range(1, max_len + 1))
-sum_timing_df.insert(0, "Iteration", range(1, max_len + 1))
-
-blank_col = pd.Series([""] * max_len, name="")
-
-combined_df = pd.concat(
-    [timing_df, blank_col, sum_timing_df.drop(columns="Iteration")],
-    axis=1
-)
-
-combined_df.to_csv("tables/timingLists_combined.csv", index=False)
-########################
-
-### GRAPHS AND PLOTTING ###
-plt.style.use("dark_background")
-for op in operations:
-    plt.figure(figsize=(10, 6))
-    plt.grid(True)
-    for name in structures:
-        times = meanTimingLists[f"{name}{op}Times"]
-        plt.plot(times, label=f"{name} {op}")
-    plt.xlabel("Iterazioni")
-    plt.ylabel("Tempo (ms)")
-    plt.title(f"Tempi medi totali di {op} dati per ogni struttura")
+    plt.figure(figsize=(10, 7))
+    for var in variations:
+        for struct in structureNames:
+            key = f"{var}{struct}{op}"
+            label = f"{var} {struct}"
+            if key in meanTimingLists:
+                means = meanTimingLists[key]
+                plt.plot(numberSetSize, means, marker='o', label=label)
+    plt.title(f"Media tempi {op} per dimensione dataset")
+    plt.xlabel("Dimensione dataset (n)")
+    plt.ylabel("Tempo operazione (ms)")
     plt.legend()
-    plt.savefig(f"graphs/{op}MeanTimes.png")
-    plt.get_current_fig_manager().set_window_title(f"Grafico Tempi Medi")
-
-for op in operations:
-    plt.figure(figsize=(10, 6))
-    plt.grid(True)
-    for name in structures:
-        times = sumTimingLists[f"{name}{op}Times"]
-        plt.plot(times, label=f"{name} {op}")
-    plt.xlabel("Iterazioni")
-    plt.ylabel("Tempo (ms)")
-    plt.title(f"Tempi totali di {op} dati per ogni struttura")
-    plt.legend()
-    plt.savefig(f"graphs/{op}TotalTimes.png")
-    plt.get_current_fig_manager().set_window_title(f"Grafico Tempi Totali")
-
-
-for op in operations:
-    plt.figure(figsize=(10, 6))
-    plt.grid(True)
-    for name in structures:
-        times = timingLists[f"{name}{op}Times"]
-        plt.bar(range(len(times)), times, label=f"{name} {op}", alpha=0.7, width=1)
-    plt.xlabel("Iterazioni")
-    plt.ylabel("Tempo (ms)")
-    plt.title(f"Tempi singoli di {op} dati per ogni struttura")
-    plt.legend()
-    plt.savefig(f"graphs/{op}SingleTimes.png")
-    plt.get_current_fig_manager().set_window_title(f"Grafico Tempi Singoli")
-
+    plt.grid(False)
+    plt.savefig(f"graphs/{op.lower()}_timing_plot.png", facecolor='black', bbox_inches='tight')
 plt.show()
-#############################
