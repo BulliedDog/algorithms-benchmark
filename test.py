@@ -117,7 +117,7 @@ for op in operations:
     plt.legend()
     plt.grid(False)
     plt.savefig(f"graphs/{op.lower()}_timing_plot.png", facecolor='black', bbox_inches='tight')
-plt.show()
+#plt.show()
 
 # TABELLA TEMPI ITERAZIONI #
 rows = []
@@ -134,7 +134,7 @@ df.to_csv("tables/tabella_tempi_iterazioni.csv")
 rows = []
 for name, time in meanTimingLists.items():
     rows.append({
-        "Tipo struttura \n[variazione][struttura][operazione]": name,
+        "Tipo di struttura \n[variazione][struttura][operazione]": name,
         **{f"Dimensione dataset {numberSetSize[i]}": t for i, t in enumerate(time)}
     })
 df = pd.DataFrame(rows)
