@@ -59,6 +59,14 @@ class LinkedOrderedList:
             node.next = predecessorNewNode.next
             predecessorNewNode.next = node
         return True
+    def checkOrder(self):
+        prevNode = self.root
+        currentNode = self.root.next
+        while currentNode is not None and prevNode is not None:
+            if (currentNode.value > prevNode.value if self.type == "max" else currentNode.value < prevNode.value):
+                raise Exception(f"Errore ordine {self.name}")
+            prevNode = currentNode
+            currentNode = currentNode.next
 
 class Node:
     def __init__(self, value):

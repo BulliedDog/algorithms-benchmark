@@ -50,3 +50,18 @@ class Heap:
 
     def getValue(self, i: int) -> int:
         return self.array[i]
+    
+    def checkOrder(self, i=0) -> bool:
+        p = (i - 1) // 2 # padre da confrontare
+        if p < 0:
+            p = 0
+        l = i * 2 + 1 # figlio sinistro considerando i che parte da zero
+        r = i * 2 + 2 # figlio destro
+        if (self.array[p] < self.array[i] if self.type=="max" else  self.array[p] > self.array[i]):
+            raise Exception(f"Errore ordine {self.name}")
+        if l >= self.size:
+            return
+        self.checkOrder(l)
+        if r >= self.size:
+            return
+        self.checkOrder(r)

@@ -44,7 +44,9 @@ for name, ds in structures.items():
         end = now()
         gc.enable()
         elapsed += (end - start) * 1000 # ms * 1000 = ms
-    #TODO: aggiungere chiamata a funzione check di ordinamento della heap e ordered linke list
+    check = getattr(ds, "checkOrder", None)
+    if callable(check):
+        check()
     timingLists[f"{ds.type}{ds.name}{ds.plannedSize}Insert"].append(elapsed)
     print(f"{name} => inseriti {len(numbers[f"{name}"])} elementi in {elapsed}ms")
 
@@ -71,10 +73,13 @@ for name, ds in structures.items():
         if flag == False:
             raise Exception(f"{name} -> errore (iterazione {i} nell'indice {randomIndex} fuori range, dimensione[{ds.size}] o struttura vuota!")
         elapsed += (end - start) * 1000
+    check = getattr(ds, "checkOrder", None)
+    if callable(check):
+        check()
     timingLists[f"{ds.type}{ds.name}{ds.plannedSize}IncDec"].append(elapsed)
     print(f"{name} => cambiato valore di {ds.plannedSize} elementi in {elapsed}ms")
 
-### extract ###
+# EXTRACT #
 print("Raccolta tempi extract valori max/min:\n")
 for name,ds in structures.items():
     elapsed = 0
@@ -87,6 +92,9 @@ for name,ds in structures.items():
         if node is None:
             raise Exception(f"{name} -> errore durante l'estrazione {i}, la struttura è vuota!")
         elapsed += (end - start) * 1000 # ms * 1000 = ms
+        check = getattr(ds, "checkOrder", None)
+        if callable(check):
+            check()
     timingLists[f"{ds.type}{ds.name}{ds.plannedSize}Extract"].append(elapsed)
     print(f"{name} => estratti {ds.plannedSize} elementi {ds.type} in {elapsed}ms")
 
