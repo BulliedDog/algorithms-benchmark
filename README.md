@@ -1,2 +1,2 @@
 # algorithms-benchmark
-Read the jupyter notebooks for a full tour on the project
+A comparison of different algorithms, read the jupiter notebooks for more details.
