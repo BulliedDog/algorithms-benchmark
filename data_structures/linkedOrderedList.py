@@ -30,10 +30,7 @@ class LinkedOrderedList:
         if self.size == 0:
             return None
         targetNode = self.root
-        if self.root.next is not None:
-            self.root = self.root.next
-        else:
-            self.root = None
+        self.root = self.root.next
         self.size -= 1
         return targetNode # estraendo il primo elemento la lista rimarrà sempre ordinata
 
@@ -59,7 +56,10 @@ class LinkedOrderedList:
             node.next = predecessorNewNode.next
             predecessorNewNode.next = node
         return True
-    def checkOrder(self):
+    
+    def checkOrder(self) -> bool:
+        if self.size <= 1:
+            return True 
         prevNode = self.root
         currentNode = self.root.next
         while currentNode is not None and prevNode is not None:
@@ -67,7 +67,8 @@ class LinkedOrderedList:
                 raise Exception(f"Errore ordine {self.name}")
             prevNode = currentNode
             currentNode = currentNode.next
-
+        return True
+    
 class Node:
     def __init__(self, value):
         self.value = value
