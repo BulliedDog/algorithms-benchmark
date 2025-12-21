@@ -1,0 +1,1325 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Keep aspect ratio if custom image width or height is specified
+    \setkeys{Gin}{keepaspectratio}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{soul}      % strikethrough (\st) support for pandoc >= 3.0.0
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \makeatletter
+    \newsavebox\pandoc@box
+    \newcommand*\pandocbounded[1]{%
+      \sbox\pandoc@box{#1}%
+      % scaling factors for width and height
+      \Gscale@div\@tempa\textheight{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+      \Gscale@div\@tempb\linewidth{\wd\pandoc@box}%
+      % select the smaller of both
+      \ifdim\@tempb\p@<\@tempa\p@
+        \let\@tempa\@tempb
+      \fi
+      % scaling accordingly (\@tempa < 1)
+      \ifdim\@tempa\p@<\p@
+        \scalebox{\@tempa}{\usebox\pandoc@box}%
+      % scaling not needed, use as it is
+      \else
+        \usebox{\pandoc@box}%
+      \fi
+    }
+    \makeatother
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Report}
+    
+    
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@ges}{\let\PY@bf=\textbf\let\PY@it=\textit}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{relazione-strutture-dati-heap-likedlist-linkedorderedlist}{%
+\section{Relazione strutture dati Heap, LikedList,
+LinkedOrderedList}\label{relazione-strutture-dati-heap-likedlist-linkedorderedlist}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \hyperref[obiettivo]{Obiettivo}
+\item
+  \hyperref[premesse-teoriche]{Premesse teoriche}
+\item
+  \hyperref[tempi-teorici]{Tempi teorici}
+\item
+  \hyperref[schema-dei-moduli-e-delle-classi]{Schema dei moduli e delle classi}
+\item
+  \hyperref[scelte-implementative]{Scelte implementate}
+\item
+  \hyperref[dati-utilizzati]{Dati utilizzati}
+\item
+  \hyperref[specifiche-della-piattaforma-di-test]{Specifiche della piattaforma di test}
+\item
+  \hyperref[misurazioni-effettuate]{Misurazioni effettuate}
+\item
+  \hyperref[presentazione-dei-risultati]{Presentazione dei risultati}
+\item
+  \hyperref[conclusione]{Conclusione, prima della documentazione}
+\item
+  \hyperref[documentazione]{Documentazione}
+\item
+  \hyperref[file-data_structuresheappy]{heap.py}
+\item
+  \hyperref[file-data_structureslinkedlistpy]{linkedList.py}
+\item
+  \hyperref[file-data_structureslinkedorderedlistpy]{linkedOrderedList.py}
+\item
+  \hyperref[file-testpy-parti-principali]{test.py}
+\end{enumerate}
+
+\hypertarget{obiettivo}{%
+\subsubsection{Obiettivo}\label{obiettivo}}
+
+Facendo riferimento ai principi studiati nel corso di Algoritmi e
+Strutture Dati, l'obiettivo è valutare sperimentalmente le prestazioni
+delle strutture dati Heap, LinkedList e LinkedOrderedList, scegliendo
+test che riflettano le loro caratteristiche teoriche più rilevanti (ad
+esempio, tempi di inserimento, cambio valore (quindi anche ricerca) e
+estrazione max/min).
+
+\hypertarget{premesse-teoriche}{%
+\subsubsection{Premesse Teoriche}\label{premesse-teoriche}}
+
+\textbf{Heap}: - Struttura dati ad albero binario completo, quindi può
+essere rappresentato tramite array - Al nodo \(i\)-esimo abbiamo: -
+Parent(\(i\)) = \(\lfloor i/2 \rfloor\) - Left(\(i\)) = \(2i\) -
+Right(\(i\)) = \(2i + 1\) - Se maxHeap =\textgreater{} A{[}parent{]}
+\(\geq\) A{[}child{]} - Se minHeap =\textgreater{} A{[}parent{]}
+\(\leq\) A{[}child{]} - Il primo elemento è massimo se maxHeap (minimo
+se minHeap) - L'altezza massima dell'albero binario heap è
+\(h = \lfloor \log_2 n\rfloor\)
+
+\textbf{Linked List}: - Composta da nodi (single linked list) dove si ha
+un unico puntatore al nodo successivo - Non ha alcun ordine, per cui
+generalmente ci si aspettano dei tempi e costi maggiori di tutte le
+altre strutture dati in questo esercizio - L'inserimento è l'unico
+vantaggio se fatto in testa (non è il nostro caso per scelta
+implementativa così da preservare gli indici dei valori), non avendo
+alcun ordine o criterio le operazioni di inserimento sono le più
+immediate - Per la ricerca ci si aspetta di dover scorrere l'intera
+lista nel caso peggiore quindi costo lineare, vedi
+\hyperref[tempi-teorici]{tabella tempi teorici} sotto
+
+\textbf{Linked Ordered List}: - Composta da nodi come la Linked List con
+unico puntatore al nodo successivo - Gli elementi sono in ordine
+decrescente se maxLinkedOrderedList così da avere massimo come nodo
+\texttt{root} oppure minimo se altrimenti, questo riduce notevolmente i
+costi di estrazione del massimo/minimo - L'inserimento deve scorrere la
+lista finchè non trova il predecessore per concatenare il nuovo nodo, a
+differenza della lista concatenata non ordinata che nel nostro caso deve
+concatenare in fondo alla lista
+
+\hypertarget{tempi-teorici}{%
+\subsubsection{Tempi teorici}\label{tempi-teorici}}
+
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.30}}
+  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.22}}
+  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.24}}
+  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.24}}@{}}
+\toprule
+Struttura & Insert & Inc/Dec & Extract \\
+\midrule
+\endhead
+Heap & \( O(\log{n}) \) (costo bubble-up) & \( O(\log{n}) \) (costo
+bubble-up) & \( O(\log{n}) \) (costo heapify dell'ultimo valore messo in
+testa) \\
+Lista concatenata & \( O(n) \) (inserimento in coda) & \( O(n) \)
+(ricerca elemento per indice) & \( O(n) \) (ricerca valore massimo) \\
+Lista concatenata ordinata & \( O(n) \) (inserimento in ordine) &
+\( O(n) \) (ricerca elemento per indice) & \( O(1) \) (è il primo
+elemento) \\
+\bottomrule
+\end{longtable}
+
+\hypertarget{schema-dei-moduli-e-delle-classi}{%
+\subsubsection{Schema dei moduli e delle
+classi}\label{schema-dei-moduli-e-delle-classi}}
+
+L'unico modulo o package che è stato creato e quello per la cartella
+data\_structures per una facile importazione nel file test.py. Gli
+elementi di suddetto package sono le seguenti classi (vi sono altri
+attributi come il nome e il tipo ma servono solo per un migliore
+riconoscimento su test.py): - \textbf{Heap} : Attributi: -
+\texttt{array}: int = lista python che contiene i valori. -
+\texttt{type}: string = può essere ``max'' oppure ``min'', usato per non
+ripetere il codice. - \texttt{size} = inizialmente zero. Funzioni: -
+\texttt{\_heapify(self,\ i:\ int)} = serve a riordinare l'array con i
+padri e figli corretti dall'alto verso il basso. -
+\texttt{extract(self)\ -\textgreater{}\ int} = estrae il massimo o il
+minimo, che è sempre il primo elemento per metterci nella posizione
+l'ultimo elemento ed infine chiama heapify() per ripristinarne l'ordine.
+- \texttt{checkOrder(seld,\ i=0)\ -\textgreater{}\ bool} = controlla
+dopo ogni operazione di inserimento (quindi anche bubble-up), incremento
+o decremento di un valore e di estrazione se l'ordine è stato preservato
+o ristabilito. -
+\texttt{incDecValue(self,\ i:\ int,\ value:\ int)\ -\textgreater{}\ bool}
+= Cambia il valore dell'elemento all'indice i e riordina l'heap se
+necessario (bubble-up o bubble-down a seconda del tipo di heap). -
+\textbf{LinkedList} : Attributi: - \texttt{head}: riferimento al primo
+nodo della lista. - \texttt{size}: numero di elementi nella lista.
+Funzioni: - \texttt{insert(self,\ value:\ int)}: inserisce un nuovo nodo
+in coda alla lista. -
+\texttt{incDecValue(self,\ i:\ int,\ value:\ int)\ -\textgreater{}\ bool}:
+modifica il valore dell'elemento all'indice i (scorrendo la lista) senza
+riordino. - \texttt{extract(self)\ -\textgreater{}\ int}: cerca e
+rimuove il valore massimo (scorrendo tutta la lista). -
+\textbf{LinkedOrderedList} : Attributi: - \texttt{head}: riferimento al
+primo nodo della lista ordinata. - \texttt{size}: numero di elementi
+nella lista. Funzioni: - \texttt{insert(self,\ value:\ int)}: inserisce
+il nuovo valore mantenendo l'ordine crescente/decrescente. -
+\texttt{incDecValue(self,\ i:\ int,\ value:\ int)\ -\textgreater{}\ bool}:
+modifica il valore dell'elemento all'indice i (scorrendo la lista) e
+riordina la lista se necessario. -
+\texttt{checkOrder(seld,\ i=0)\ -\textgreater{}\ bool} = controlla dopo
+ogni operazione di inserimento, incremento o decremento di un valore e
+di estrazione se l'ordine è stato preservato o ristabilito, in questo
+caso, se l'ultimo elemento è il pi. -
+\texttt{extract(self)\ -\textgreater{}\ int}: estrae e rimuove il primo
+elemento (che è sempre il massimo o minimo, a seconda dell'ordinamento).
+
+\hypertarget{scelte-implementative}{%
+\subsubsection{Scelte implementative}\label{scelte-implementative}}
+
+\begin{itemize}
+\tightlist
+\item
+  Heap è stato implementato con una \textbf{lista python}, poiché simula
+  il comportamento come un array così da essere più efficiente.
+\item
+  La funzione di \textbf{inserimento} nelle lista non ordinata inserisce
+  gli elementi in \textbf{coda} per evitare di slittare gli indici degli
+  elementi.
+\item
+  La funzione di \textbf{cambio valore} prevede sia uno
+  \textbf{scorrimento} per indice che un \textbf{riordinamento}
+  (\emph{tranne nel caso della lista collegata non ordinata}).
+\item
+  La funzione di estrazione prevede la ricerca del valore massimo nel
+  caso della lista collegata non ordinata.
+\item
+  Inc/Dec si riferisce all'operazione di cambio valore dell'elemento
+  nella struttura dati che però nel caso dell'heap deve poter solo
+  incrementare il valore se maxHeap altrimenti decrementare se minHeap
+  (per costruzione dell'algoritmo di bubble-up da libro).
+\end{itemize}
+
+\hypertarget{dati-utilizzati}{%
+\subsubsection{Dati utilizzati}\label{dati-utilizzati}}
+
+\begin{itemize}
+\tightlist
+\item
+  Dimensioni dei dataset
+\item
+  Valore massimo per il range della generazione randomica
+\item
+  Valore massimo di incremento/decremento
+\item
+  I valori dei dataset vengono generati automaticamente tramite funzioni
+  randomiche del package rand, per garantire riproducibilità e
+  variabilità ogni volta che si esegue il programma test.py.\\
+  Ad ogni iterazione, seppur la dimensione rimane la stessa, gli
+  elementi dell'array sono di nuovo randomici rispetto al dataset della
+  iterazione precedente.
+\item
+  Ogni operazione, iterazione e dimensione ha il relativo dataset di
+  numeri randomici, così da avere tempi e misurazioni indipendenti
+  facendone la media, nel caso attuale 50 iterazioni per operazione
+  vengono fatte per avere una media dei tempi sufficientemente accurata
+  con le sperimentazioni.
+\item
+  In alternativa, si possono utilizzare dataset reali per valutare le
+  prestazioni su casi concreti. \textbf{NB:} alcune misurazioni
+  potrebbero essere influenzate dal thrashing della memoria, per ovviare
+  a ciò quindi il numero di iterazioni è stato scelto sufficientemente
+  alto \texttt{numberOfIterations\ =\ 50} da ridurre tali ``rumori'' che
+  possono sporcare le osservazioni sperimentali dell'andamento della
+  curva dei tempi nei grafici. \#\#\# Specifiche della piattaforma di
+  test
+\item
+  \textbf{Hardware}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    CPU = Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz, 1800 Mhz, 4 Core(s),
+    8 Logical Processor(s)
+  \item
+    RAM = Installed Physical Memory (RAM) 8,00 GB
+  \item
+    Modello = LENOVO\_MT\_81HN\_BU\_idea\_FM\_V130-15IKB
+  \end{itemize}
+\item
+  \textbf{Sistema operativo}: Windows 11 Home
+\end{itemize}
+
+\hypertarget{misurazioni-effettuate}{%
+\subsubsection{Misurazioni effettuate}\label{misurazioni-effettuate}}
+
+\begin{itemize}
+\tightlist
+\item
+  Tutte le misurazioni sono state effettuate sulla stessa macchina per
+  garantire coerenza.
+\item
+  Sono stati misurati i tempi di esecuzione singoli delle principali
+  operazioni (inserimento, cambio valore, estrazione) su insiemi di dati
+  di dimensione arbitraria ma sufficientemente grande, di seguito sono
+  illustrati grafici con dimensioni del dataset dei tempi medi calcolati
+  su \texttt{numberOfIterations\ =\ 50}.
+\item
+  I tempi singoli e medi sono stati salvati in dataframe esportati poi
+  su file .csv sotto \texttt{/tables/}.
+\item
+  La mappa meanTimingLists è un calcolo medio, della somma dei tempi di
+  timingLists a partire dalla prima iterazione fino alla i-esima della
+  operazione specifica sul dataset specifico. Ho scelto di usare tale
+  metrica per rimuovere rumori e punti di discontinuità nei grafici dei
+  tempi così che sia ancora più evidente l'\textbf{andamento}
+  all'aumentare della dimensione del dataset piuttosto che i tempi
+  aggregati singoli.
+\item
+  Ogni test quindi genera valori randomici secondo i parametri di input
+  o di default.
+\end{itemize}
+
+\hypertarget{presentazione-dei-risultati}{%
+\subsubsection{Presentazione dei
+risultati}\label{presentazione-dei-risultati}}
+
+Inizialmente avevo sfruttato la funzione \texttt{time()} del package
+\texttt{time}, notando però notevoli picchi ogniqualvolta la memoria del
+mio sistema andava in thrashing; il garbage collector subentrava in
+quelle frazioni di esecuzione dei vari metodi delle strutture dati così
+da aggregare anche il tempo di esecuzione della routine del garbage
+collector -\textgreater{} noi \textbf{non} vogliamo questo per una
+misurazione e comparazione pulita dei tempi.
+
+Per ovviare a tale problema ho sfruttato la funzione
+\texttt{gc.disable()} di \texttt{gc} (garbage collector) che evita di
+far sì che subentri la prelazione del garbage collector durante
+l'esecuzione delle operazioni.
+
+\hypertarget{osservazioni-sperimentali}{%
+\subsubsection{Osservazioni
+sperimentali}\label{osservazioni-sperimentali}}
+
+Possiamo osservare:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Insert}\\
+  \includegraphics{graphs/insert_timing_plot.png}
+\item
+  \textbf{IncDec}\\
+  \includegraphics{graphs/incdec_timing_plot.png}
+\item
+  \textbf{Extract}\\
+  \includegraphics{graphs/extract_timing_plot.png}
+\end{enumerate}
+
+\hypertarget{conclusione}{%
+\subsubsection{Conclusione}\label{conclusione}}
+
+I test confermano la teoria: Heap mantiene tempi logaritmici e costanti
+anche su grandi dataset, LinkedList scala linearmente ed è inefficiente
+per operazioni su molti dati, LinkedOrderedList è lenta all'inserimento
+ma velocissima in estrazione, LinkedList per l'inserimento è
+esponenziale perché viene fatto in code -\textgreater{} si deve scorrere
+per ottenere l'ultimo puntatore a nodo non nullo. La scelta della
+struttura deve seguire la frequenza e il tipo di operazioni richieste:
+Heap primeggia nella gestione di priorità e grandi numeri, le liste
+vanno bene solo per casi piccoli o accessi sequenziali.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{documentazione}{%
+\subsubsection{Documentazione}\label{documentazione}}
+
+Di seguito sono riportati i frammenti di codice presi dalla cartella
+\texttt{data\_structures} e da \texttt{test.py}, con una breve
+spiegazione immediatamente sotto ogni blocco.
+
+\hypertarget{file-data_structuresheap.py}{%
+\subsubsection{\texorpdfstring{File:
+\texttt{data\_structures/heap.py}}{File: data\_structures/heap.py}}\label{file-data_structuresheap.py}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class}\NormalTok{ Heap:}
+    \KeywordTok{def} \FunctionTok{\_\_init\_\_}\NormalTok{(}\VariableTok{self}\NormalTok{,}\BuiltInTok{type}\NormalTok{: }\BuiltInTok{str}\NormalTok{):}
+        \VariableTok{self}\NormalTok{.array }\OperatorTok{=}\NormalTok{ []}
+        \VariableTok{self}\NormalTok{.}\BuiltInTok{type} \OperatorTok{=} \BuiltInTok{type}
+        \VariableTok{self}\NormalTok{.size }\OperatorTok{=} \DecValTok{0}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: costruttore della classe Heap; inizializza l'array che
+rappresenta l'heap, il tipo (``max'' o ``min'') e la dimensione
+\texttt{size}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ \_heapify(}\VariableTok{self}\NormalTok{, i: }\BuiltInTok{int}\NormalTok{):}
+\NormalTok{    l }\OperatorTok{=}\NormalTok{ i }\OperatorTok{*} \DecValTok{2} \OperatorTok{+} \DecValTok{1} \CommentTok{\# figlio sinistro considerando i che parte da zero}
+\NormalTok{    r }\OperatorTok{=}\NormalTok{ i }\OperatorTok{*} \DecValTok{2} \OperatorTok{+} \DecValTok{2} \CommentTok{\# figlio destro}
+\NormalTok{    basket }\OperatorTok{=}\NormalTok{ i }\CommentTok{\# cestello che contiene indice max/min da scambiare}
+    \ControlFlowTok{if}\NormalTok{ l }\OperatorTok{\textless{}} \BuiltInTok{len}\NormalTok{(}\VariableTok{self}\NormalTok{.array) }\KeywordTok{and}\NormalTok{ (}\VariableTok{self}\NormalTok{.array[l] }\OperatorTok{\textgreater{}} \VariableTok{self}\NormalTok{.array[i] }\ControlFlowTok{if} \VariableTok{self}\NormalTok{.}\BuiltInTok{type} \OperatorTok{==} \StringTok{"max"} \ControlFlowTok{else} \VariableTok{self}\NormalTok{.array[l] }\OperatorTok{\textless{}} \VariableTok{self}\NormalTok{.array[i]):}
+\NormalTok{        basket }\OperatorTok{=}\NormalTok{ l }\CommentTok{\# massimo attuale}
+    \ControlFlowTok{if}\NormalTok{ r }\OperatorTok{\textless{}} \BuiltInTok{len}\NormalTok{(}\VariableTok{self}\NormalTok{.array) }\KeywordTok{and}\NormalTok{ (}\VariableTok{self}\NormalTok{.array[r] }\OperatorTok{\textgreater{}} \VariableTok{self}\NormalTok{.array[basket] }\ControlFlowTok{if} \VariableTok{self}\NormalTok{.}\BuiltInTok{type} \OperatorTok{==} \StringTok{"max"} \ControlFlowTok{else} \VariableTok{self}\NormalTok{.array[r] }\OperatorTok{\textless{}} \VariableTok{self}\NormalTok{.array[basket]):}
+\NormalTok{        basket }\OperatorTok{=}\NormalTok{ r}
+    \ControlFlowTok{if}\NormalTok{ basket }\OperatorTok{!=}\NormalTok{ i:}
+\NormalTok{        tmp }\OperatorTok{=} \VariableTok{self}\NormalTok{.array[i]}
+        \VariableTok{self}\NormalTok{.array[i] }\OperatorTok{=} \VariableTok{self}\NormalTok{.array[basket]}
+        \VariableTok{self}\NormalTok{.array[basket] }\OperatorTok{=}\NormalTok{ tmp}
+        \VariableTok{self}\NormalTok{.\_heapify(basket)}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: funzione ricorsiva che ripristina la proprietà di heap
+(heapify / bubble-down) a partire dall'indice \texttt{i}, scambiando con
+il figlio massimo/minimo a seconda di \texttt{self.type}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ extract(}\VariableTok{self}\NormalTok{) }\OperatorTok{{-}\textgreater{}} \BuiltInTok{int}\NormalTok{: }\CommentTok{\# estrae il massimo/minimo}
+    \ControlFlowTok{if} \BuiltInTok{len}\NormalTok{(}\VariableTok{self}\NormalTok{.array) }\OperatorTok{\textless{}} \DecValTok{1}\NormalTok{:}
+        \ControlFlowTok{return} \VariableTok{None}
+\NormalTok{    basket }\OperatorTok{=} \VariableTok{self}\NormalTok{.array[}\DecValTok{0}\NormalTok{] }\CommentTok{\# basket contiene o il max o il min}
+    \VariableTok{self}\NormalTok{.array[}\DecValTok{0}\NormalTok{] }\OperatorTok{=} \VariableTok{self}\NormalTok{.array[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{] }\CommentTok{\# mette come primo elemento (max/min) il valore finale}
+    \VariableTok{self}\NormalTok{.array.pop() }\CommentTok{\# elimina l\textquotesingle{}elemento all\textquotesingle{}ultima posizione che sarebbe l\textquotesingle{}elemento massimo dopo lo scabio della riga sopra}
+    \VariableTok{self}\NormalTok{.\_heapify(}\DecValTok{0}\NormalTok{)}
+    \VariableTok{self}\NormalTok{.size }\OperatorTok{{-}=} \DecValTok{1}
+    \ControlFlowTok{return}\NormalTok{ basket}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: estrae il valore della radice (massimo o minimo),
+sostituisce la radice con l'ultimo elemento, rimuove l'ultimo e richiama
+\texttt{\_heapify(0)} a partire dalla radice per ripristinare la
+proprietà dell'heap.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ incDecValue(}\VariableTok{self}\NormalTok{, i: }\BuiltInTok{int}\NormalTok{, value: }\BuiltInTok{int}\NormalTok{) }\OperatorTok{{-}\textgreater{}} \BuiltInTok{bool}\NormalTok{: }\CommentTok{\# incrementa/diminuisce il valore a seconda del tipo di heap}
+    \ControlFlowTok{if}\NormalTok{ (value }\OperatorTok{\textless{}} \VariableTok{self}\NormalTok{.array[i] }\ControlFlowTok{if} \VariableTok{self}\NormalTok{.}\BuiltInTok{type} \OperatorTok{==} \StringTok{"max"} \ControlFlowTok{else}\NormalTok{ value }\OperatorTok{\textgreater{}} \VariableTok{self}\NormalTok{.array[i]):}
+        \ControlFlowTok{return} \VariableTok{False} \CommentTok{\# se il tipo è max/min il valore deve per forza essere maggiore/minore o uguale rispettivamente}
+    \VariableTok{self}\NormalTok{.array[i] }\OperatorTok{=}\NormalTok{ value}
+\NormalTok{    parent }\OperatorTok{=}\NormalTok{ (i }\OperatorTok{{-}} \DecValTok{1}\NormalTok{) }\OperatorTok{//} \DecValTok{2}
+    \ControlFlowTok{while}\NormalTok{ i }\OperatorTok{\textgreater{}} \DecValTok{0} \KeywordTok{and}\NormalTok{ (}\VariableTok{self}\NormalTok{.array[parent] }\OperatorTok{\textless{}} \VariableTok{self}\NormalTok{.array[i] }\ControlFlowTok{if} \VariableTok{self}\NormalTok{.}\BuiltInTok{type} \OperatorTok{==} \StringTok{"max"} \ControlFlowTok{else} \VariableTok{self}\NormalTok{.array[parent] }\OperatorTok{\textgreater{}} \VariableTok{self}\NormalTok{.array[i]):}
+\NormalTok{        tmp }\OperatorTok{=} \VariableTok{self}\NormalTok{.array[parent]}
+        \VariableTok{self}\NormalTok{.array[parent] }\OperatorTok{=} \VariableTok{self}\NormalTok{.array[i]}
+        \VariableTok{self}\NormalTok{.array[i] }\OperatorTok{=}\NormalTok{ tmp}
+\NormalTok{        i }\OperatorTok{=}\NormalTok{ parent}
+\NormalTok{        parent }\OperatorTok{=}\NormalTok{ (i }\OperatorTok{{-}} \DecValTok{1}\NormalTok{) }\OperatorTok{//} \DecValTok{2}
+    \ControlFlowTok{return} \VariableTok{True}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: modifica il valore alla posizione \texttt{i} e, se
+necessario, effettua il bubble-up (scambia con i padri) per ripristinare
+la proprietà di heap; verifica anche che la nuova valore sia coerente
+con il tipo di heap.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ insert(}\VariableTok{self}\NormalTok{, value: }\BuiltInTok{int}\NormalTok{):}
+    \VariableTok{self}\NormalTok{.array.append(value)}
+    \VariableTok{self}\NormalTok{.incDecValue(}\BuiltInTok{len}\NormalTok{(}\VariableTok{self}\NormalTok{.array) }\OperatorTok{{-}} \DecValTok{1}\NormalTok{, value)}
+    \VariableTok{self}\NormalTok{.size }\OperatorTok{+=} \DecValTok{1}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: inserisce \texttt{value} aggiungendolo in coda all'array e
+chiama \texttt{incDecValue} per posizionarlo correttamente (bubble-up);
+aggiorna \texttt{size}.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{file-data_structureslinkedlist.py}{%
+\subsubsection{\texorpdfstring{File:
+\texttt{data\_structures/linkedList.py}}{File: data\_structures/linkedList.py}}\label{file-data_structureslinkedlist.py}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class}\NormalTok{ LinkedList:}
+    \KeywordTok{def} \FunctionTok{\_\_init\_\_}\NormalTok{(}\VariableTok{self}\NormalTok{, }\BuiltInTok{type}\NormalTok{):}
+        \VariableTok{self}\NormalTok{.root }\OperatorTok{=} \VariableTok{None}
+        \VariableTok{self}\NormalTok{.size }\OperatorTok{=} \DecValTok{0}
+        \VariableTok{self}\NormalTok{.}\BuiltInTok{type} \OperatorTok{=} \BuiltInTok{type}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: costruttore della lista concatenata non ordinata;
+\texttt{root} punta al primo nodo, \texttt{size} mantiene il conteggio,
+\texttt{type} indica se si considera massimo o minimo nelle operazioni
+(usato in \texttt{extract}).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ insert(}\VariableTok{self}\NormalTok{, value):}
+\NormalTok{    node }\OperatorTok{=}\NormalTok{ Node(value)}
+    \ControlFlowTok{if} \VariableTok{self}\NormalTok{.size }\OperatorTok{==} \DecValTok{0} \KeywordTok{or} \VariableTok{self}\NormalTok{.root }\KeywordTok{is} \VariableTok{None}\NormalTok{:}
+        \VariableTok{self}\NormalTok{.root }\OperatorTok{=}\NormalTok{ node}
+    \ControlFlowTok{else}\NormalTok{:}
+\NormalTok{        lastNode }\OperatorTok{=} \VariableTok{self}\NormalTok{.\_getLast()}
+\NormalTok{        lastNode.}\BuiltInTok{next} \OperatorTok{=}\NormalTok{ node}
+    \VariableTok{self}\NormalTok{.size }\OperatorTok{+=} \DecValTok{1}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: inserisce un nuovo nodo in coda alla lista; se la lista è
+vuota imposta il nuovo nodo come \texttt{root}, altrimenti appende alla
+fine.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ \_getLast(}\VariableTok{self}\NormalTok{):}
+    \ControlFlowTok{if} \VariableTok{self}\NormalTok{.size }\OperatorTok{==} \DecValTok{0}\NormalTok{:}
+        \ControlFlowTok{return} \VariableTok{None}
+\NormalTok{    lastNode }\OperatorTok{=} \VariableTok{self}\NormalTok{.root}
+    \ControlFlowTok{while}\NormalTok{ lastNode.}\BuiltInTok{next} \KeywordTok{is} \KeywordTok{not} \VariableTok{None}\NormalTok{:}
+\NormalTok{        lastNode }\OperatorTok{=}\NormalTok{ lastNode.}\BuiltInTok{next}
+    \ControlFlowTok{return}\NormalTok{ lastNode}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: ritorna l'ultimo nodo della lista scorrendo i puntatori
+\texttt{next}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ \_getNode(}\VariableTok{self}\NormalTok{, i):}
+    \ControlFlowTok{if} \VariableTok{self}\NormalTok{.size }\OperatorTok{==} \DecValTok{0}\NormalTok{:}
+        \ControlFlowTok{return} \VariableTok{None}
+\NormalTok{    targetNode }\OperatorTok{=} \VariableTok{self}\NormalTok{.root}
+    \ControlFlowTok{while}\NormalTok{ targetNode }\KeywordTok{is} \KeywordTok{not} \VariableTok{None} \KeywordTok{and}\NormalTok{ i }\OperatorTok{\textgreater{}} \DecValTok{0}\NormalTok{:}
+\NormalTok{        targetNode }\OperatorTok{=}\NormalTok{ targetNode.}\BuiltInTok{next}
+\NormalTok{        i }\OperatorTok{{-}=} \DecValTok{1}
+    \ControlFlowTok{return}\NormalTok{ targetNode}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: ritorna il nodo alla posizione indicata (indice zero-based)
+scorrendo dalla radice.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ extract(}\VariableTok{self}\NormalTok{): }\CommentTok{\# estrae il massimo o il minimo}
+    \ControlFlowTok{if} \VariableTok{self}\NormalTok{.size }\OperatorTok{==} \DecValTok{0} \KeywordTok{or} \VariableTok{self}\NormalTok{.root }\KeywordTok{is} \VariableTok{None}\NormalTok{:}
+        \ControlFlowTok{return} \VariableTok{None}
+\NormalTok{    predecessorTargetNode }\OperatorTok{=} \VariableTok{None}
+\NormalTok{    targetNode }\OperatorTok{=} \VariableTok{self}\NormalTok{.root }\CommentTok{\# nodo di appoggio max o min}
+\NormalTok{    predecessorNode }\OperatorTok{=} \VariableTok{None}
+\NormalTok{    node }\OperatorTok{=} \VariableTok{self}\NormalTok{.root}
+    \ControlFlowTok{while}\NormalTok{ node }\KeywordTok{is} \KeywordTok{not} \VariableTok{None}\NormalTok{:}
+        \ControlFlowTok{if}\NormalTok{ (node.value }\OperatorTok{\textgreater{}}\NormalTok{ targetNode.value }\ControlFlowTok{if} \VariableTok{self}\NormalTok{.}\BuiltInTok{type} \OperatorTok{==} \StringTok{"max"} \ControlFlowTok{else}\NormalTok{ node.value }\OperatorTok{\textless{}}\NormalTok{ targetNode.value):}
+\NormalTok{            predecessorTargetNode }\OperatorTok{=}\NormalTok{ predecessorNode}
+\NormalTok{            targetNode }\OperatorTok{=}\NormalTok{ node}
+\NormalTok{        predecessorNode }\OperatorTok{=}\NormalTok{ node}
+\NormalTok{        node }\OperatorTok{=}\NormalTok{ node.}\BuiltInTok{next}
+    \ControlFlowTok{if}\NormalTok{ predecessorTargetNode }\KeywordTok{is} \KeywordTok{not} \VariableTok{None}\NormalTok{:}
+\NormalTok{        predecessorTargetNode.}\BuiltInTok{next} \OperatorTok{=}\NormalTok{ targetNode.}\BuiltInTok{next}
+    \ControlFlowTok{else}\NormalTok{:}
+        \VariableTok{self}\NormalTok{.root }\OperatorTok{=}\NormalTok{ targetNode.}\BuiltInTok{next}
+    \VariableTok{self}\NormalTok{.size }\OperatorTok{{-}=} \DecValTok{1}
+    \ControlFlowTok{return}\NormalTok{ targetNode}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: scorre tutta la lista per trovare il nodo con valore
+massimo (o minimo) a seconda di \texttt{self.type}, rimuove quel nodo
+collegando il predecessore al successivo e lo restituisce.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ incDecValue(}\VariableTok{self}\NormalTok{, i, value): }\CommentTok{\# non necessita alcun controllo sui valori (maggiore dell\textquotesingle{}attuale se max, minore se min) perché è disordinata la lista}
+    \ControlFlowTok{if}\NormalTok{ i }\OperatorTok{\textless{}} \DecValTok{0} \KeywordTok{or}\NormalTok{ i }\OperatorTok{\textgreater{}=} \VariableTok{self}\NormalTok{.size }\KeywordTok{or} \VariableTok{self}\NormalTok{.size }\OperatorTok{==} \DecValTok{0}\NormalTok{:}
+        \ControlFlowTok{return} \VariableTok{False}
+\NormalTok{    targetNode }\OperatorTok{=} \VariableTok{self}\NormalTok{.\_getNode(i)}
+    \ControlFlowTok{if}\NormalTok{ targetNode }\KeywordTok{is} \VariableTok{None}\NormalTok{:}
+        \ControlFlowTok{return} \VariableTok{False}
+\NormalTok{    targetNode.value }\OperatorTok{=}\NormalTok{ value}
+    \ControlFlowTok{return} \VariableTok{True}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: cambia il valore del nodo alla posizione \texttt{i} senza
+ulteriori riordini (lista non ordinata), verificando i limiti.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class}\NormalTok{ Node:}
+    \KeywordTok{def} \FunctionTok{\_\_init\_\_}\NormalTok{(}\VariableTok{self}\NormalTok{, value):}
+        \VariableTok{self}\NormalTok{.value }\OperatorTok{=}\NormalTok{ value}
+        \VariableTok{self}\NormalTok{.}\BuiltInTok{next} \OperatorTok{=} \VariableTok{None}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: classe nodo semplice con \texttt{value} e puntatore
+\texttt{next}.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{file-data_structureslinkedorderedlist.py}{%
+\subsubsection{\texorpdfstring{File:
+\texttt{data\_structures/linkedOrderedList.py}}{File: data\_structures/linkedOrderedList.py}}\label{file-data_structureslinkedorderedlist.py}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class}\NormalTok{ LinkedOrderedList:}
+    \KeywordTok{def} \FunctionTok{\_\_init\_\_}\NormalTok{(}\VariableTok{self}\NormalTok{, }\BuiltInTok{type}\NormalTok{):}
+        \VariableTok{self}\NormalTok{.root }\OperatorTok{=} \VariableTok{None}
+        \VariableTok{self}\NormalTok{.size }\OperatorTok{=} \DecValTok{0}
+        \VariableTok{self}\NormalTok{.}\BuiltInTok{type} \OperatorTok{=} \BuiltInTok{type}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: costruttore della lista collegata ordinata; \texttt{type}
+indica se l'ordine è crescente/decrescente.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ insert(}\VariableTok{self}\NormalTok{, value):}
+\NormalTok{    node }\OperatorTok{=}\NormalTok{ Node(value)}
+    \ControlFlowTok{if} \VariableTok{self}\NormalTok{.size }\OperatorTok{==} \DecValTok{0}\NormalTok{:}
+        \VariableTok{self}\NormalTok{.root }\OperatorTok{=}\NormalTok{ node}
+    \ControlFlowTok{elif}\NormalTok{ (node.value }\OperatorTok{\textgreater{}} \VariableTok{self}\NormalTok{.root.value }\ControlFlowTok{if} \VariableTok{self}\NormalTok{.}\BuiltInTok{type} \OperatorTok{==} \StringTok{"max"} \ControlFlowTok{else}\NormalTok{ node.value }\OperatorTok{\textless{}} \VariableTok{self}\NormalTok{.root.value):}
+\NormalTok{        node.}\BuiltInTok{next} \OperatorTok{=} \VariableTok{self}\NormalTok{.root}
+        \VariableTok{self}\NormalTok{.root }\OperatorTok{=}\NormalTok{ node}
+    \ControlFlowTok{else}\NormalTok{:}
+\NormalTok{        predecessorNode }\OperatorTok{=} \VariableTok{self}\NormalTok{.\_getPredecessor(node.value)}
+\NormalTok{        node.}\BuiltInTok{next} \OperatorTok{=}\NormalTok{ predecessorNode.}\BuiltInTok{next}
+\NormalTok{        predecessorNode.}\BuiltInTok{next} \OperatorTok{=}\NormalTok{ node}
+    \VariableTok{self}\NormalTok{.size }\OperatorTok{+=} \DecValTok{1}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: inserisce \texttt{value} mantenendo l'ordine richiesto; se
+deve essere primo lo posiziona come \texttt{root}, altrimenti trova il
+predecessore e lo inserisce dopo di lui.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ \_getPredecessor(}\VariableTok{self}\NormalTok{, value): }\CommentTok{\# serve a cercare l\textquotesingle{}ultimo nodo più grande/piccolo di quello da inserire}
+\NormalTok{    predecessorNode }\OperatorTok{=} \VariableTok{self}\NormalTok{.root}
+    \ControlFlowTok{while}\NormalTok{ predecessorNode.}\BuiltInTok{next} \KeywordTok{is} \KeywordTok{not} \VariableTok{None} \KeywordTok{and}\NormalTok{ (value }\OperatorTok{\textless{}}\NormalTok{ predecessorNode.}\BuiltInTok{next}\NormalTok{.value }\ControlFlowTok{if} \VariableTok{self}\NormalTok{.}\BuiltInTok{type} \OperatorTok{==} \StringTok{"max"} \ControlFlowTok{else}\NormalTok{ value }\OperatorTok{\textgreater{}}\NormalTok{ predecessorNode.}\BuiltInTok{next}\NormalTok{.value):}
+\NormalTok{        predecessorNode }\OperatorTok{=}\NormalTok{ predecessorNode.}\BuiltInTok{next}
+    \ControlFlowTok{return}\NormalTok{ predecessorNode}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: cerca il nodo dopo il quale inserire il nuovo valore.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ extract(}\VariableTok{self}\NormalTok{): }\CommentTok{\# estrae il massimo o il minimo che sarà sempre il primo elemento poiché la lista è ordinata}
+    \ControlFlowTok{if} \VariableTok{self}\NormalTok{.size }\OperatorTok{==} \DecValTok{0}\NormalTok{:}
+        \ControlFlowTok{return} \VariableTok{None}
+\NormalTok{    targetNode }\OperatorTok{=} \VariableTok{self}\NormalTok{.root}
+    \ControlFlowTok{if} \VariableTok{self}\NormalTok{.root.}\BuiltInTok{next} \KeywordTok{is} \KeywordTok{not} \VariableTok{None}\NormalTok{:}
+        \VariableTok{self}\NormalTok{.root }\OperatorTok{=} \VariableTok{self}\NormalTok{.root.}\BuiltInTok{next}
+    \ControlFlowTok{else}\NormalTok{:}
+        \VariableTok{self}\NormalTok{.root }\OperatorTok{=} \VariableTok{None}
+    \VariableTok{self}\NormalTok{.size }\OperatorTok{{-}=} \DecValTok{1}
+    \ControlFlowTok{return}\NormalTok{ targetNode }\CommentTok{\# estraendo il primo elemento la lista rimarrà sempre ordinata}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: rimuove e restituisce il primo nodo (\texttt{root}) che è
+il massimo/minimo a seconda dell'ordinamento: operazione O(1).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ incDecValue(}\VariableTok{self}\NormalTok{, i, value): }\CommentTok{\# quando cambio il valore a un singolo nodo basta che riordini quest\textquotesingle{}ultimo e non l\textquotesingle{}intera lista}
+    \ControlFlowTok{if}\NormalTok{ i }\OperatorTok{\textless{}} \DecValTok{0} \KeywordTok{or}\NormalTok{ i }\OperatorTok{\textgreater{}=} \VariableTok{self}\NormalTok{.size }\KeywordTok{or} \VariableTok{self}\NormalTok{.size }\OperatorTok{==} \DecValTok{0}\NormalTok{:}
+        \ControlFlowTok{return} \VariableTok{False}
+\NormalTok{    predecessorNode }\OperatorTok{=} \VariableTok{None} \CommentTok{\# puntatore predecessore per lo scorrimento}
+\NormalTok{    node }\OperatorTok{=} \VariableTok{self}\NormalTok{.root }\CommentTok{\# puntatore nodo scorrimento}
+    \ControlFlowTok{while}\NormalTok{ node }\KeywordTok{is} \KeywordTok{not} \VariableTok{None} \KeywordTok{and}\NormalTok{ i }\OperatorTok{\textgreater{}} \DecValTok{0}\NormalTok{:}
+\NormalTok{        predecessorNode }\OperatorTok{=}\NormalTok{ node}
+\NormalTok{        node }\OperatorTok{=}\NormalTok{ node.}\BuiltInTok{next}
+\NormalTok{        i }\OperatorTok{{-}=} \DecValTok{1}
+    \ControlFlowTok{if}\NormalTok{ predecessorNode }\KeywordTok{is} \KeywordTok{not} \VariableTok{None}\NormalTok{:}
+\NormalTok{        predecessorNode.}\BuiltInTok{next} \OperatorTok{=}\NormalTok{ node.}\BuiltInTok{next}  \CommentTok{\# tolgo il nodo alla posizione corrente}
+    \ControlFlowTok{else}\NormalTok{:}
+        \VariableTok{self}\NormalTok{.root }\OperatorTok{=}\NormalTok{ node.}\BuiltInTok{next} \CommentTok{\# se il predecessore non c\textquotesingle{}è allora il nodo diventa il nuovo root}
+\NormalTok{    node.value }\OperatorTok{=}\NormalTok{ value}
+    \ControlFlowTok{if} \VariableTok{self}\NormalTok{.root }\KeywordTok{is} \VariableTok{None} \KeywordTok{or}\NormalTok{ (node.value }\OperatorTok{\textgreater{}} \VariableTok{self}\NormalTok{.root.value }\ControlFlowTok{if} \VariableTok{self}\NormalTok{.}\BuiltInTok{type} \OperatorTok{==} \StringTok{"max"} \ControlFlowTok{else}\NormalTok{ node.value }\OperatorTok{\textless{}} \VariableTok{self}\NormalTok{.root.value):}
+\NormalTok{        node.}\BuiltInTok{next} \OperatorTok{=} \VariableTok{self}\NormalTok{.root}
+        \VariableTok{self}\NormalTok{.root }\OperatorTok{=}\NormalTok{ node}
+    \ControlFlowTok{else}\NormalTok{:}
+\NormalTok{        predecessorNewNode }\OperatorTok{=} \VariableTok{self}\NormalTok{.\_getPredecessor(value)}
+\NormalTok{        node.}\BuiltInTok{next} \OperatorTok{=}\NormalTok{ predecessorNewNode.}\BuiltInTok{next}
+\NormalTok{        predecessorNewNode.}\BuiltInTok{next} \OperatorTok{=}\NormalTok{ node}
+    \ControlFlowTok{return} \VariableTok{True}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: cambia il valore del nodo all'indice \texttt{i}, lo rimuove
+dalla posizione corrente e lo reinserisce nella posizione corretta per
+mantenere l'ordine; restituisce True se l'operazione ha successo.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class}\NormalTok{ Node:}
+    \KeywordTok{def} \FunctionTok{\_\_init\_\_}\NormalTok{(}\VariableTok{self}\NormalTok{, value):}
+        \VariableTok{self}\NormalTok{.value }\OperatorTok{=}\NormalTok{ value}
+        \VariableTok{self}\NormalTok{.}\BuiltInTok{next} \OperatorTok{=} \VariableTok{None}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: definizione del nodo per la lista ordinata.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{file-test.py-parti-principali}{%
+\subsubsection{\texorpdfstring{File: \texttt{test.py} (parti
+principali)}{File: test.py (parti principali)}}\label{file-test.py-parti-principali}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ random, time}
+\ImportTok{from}\NormalTok{ tabulate }\ImportTok{import}\NormalTok{ tabulate}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+\ImportTok{from}\NormalTok{ data\_structures }\ImportTok{import} \OperatorTok{*}
+\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: import delle librerie usate nello script di test:
+\texttt{random} e \texttt{time} per generazione e misurazioni,
+\texttt{tabulate} e \texttt{matplotlib} per output/grafici, importa le
+strutture da \texttt{data\_structures} e \texttt{pandas} per salvare
+CSV.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#\#\# RANDOM NUMBER SET }\AlertTok{\#\#\#}
+\ControlFlowTok{while} \VariableTok{True}\NormalTok{:}
+\NormalTok{    numberSetSize }\OperatorTok{=} \BuiltInTok{int}\NormalTok{(}\BuiltInTok{input}\NormalTok{(}\StringTok{"Inserire il numero di dati randomici da testare [default = 500]{-}\textgreater{} "}\NormalTok{) }\KeywordTok{or} \DecValTok{500}\NormalTok{)}
+    \ControlFlowTok{if}\NormalTok{ numberSetSize }\OperatorTok{\textgreater{}} \DecValTok{0}\NormalTok{:}
+        \ControlFlowTok{break}
+\ControlFlowTok{while} \VariableTok{True}\NormalTok{:}
+\NormalTok{    maxValue }\OperatorTok{=} \BuiltInTok{int}\NormalTok{(}\BuiltInTok{input}\NormalTok{(}\StringTok{"Inserire il valore massimo dei numeri [default = 500]{-}\textgreater{} "}\NormalTok{) }\KeywordTok{or} \DecValTok{500}\NormalTok{)}
+    \ControlFlowTok{if}\NormalTok{ maxValue }\OperatorTok{\textgreater{}} \DecValTok{0}\NormalTok{:}
+        \ControlFlowTok{break}
+\NormalTok{numbers }\OperatorTok{=}\NormalTok{ random.sample(}\BuiltInTok{range}\NormalTok{(}\DecValTok{0}\NormalTok{, maxValue), numberSetSize)}
+\ControlFlowTok{while} \VariableTok{True}\NormalTok{:}
+\NormalTok{    numberIncDecLimit }\OperatorTok{=} \BuiltInTok{int}\NormalTok{(}\BuiltInTok{input}\NormalTok{(}\StringTok{"Inserire il valore massimo di incremento/decremento [default = 500]{-}\textgreater{} "}\NormalTok{) }\KeywordTok{or} \DecValTok{500}\NormalTok{)}
+    \ControlFlowTok{if}\NormalTok{ numberIncDecLimit }\OperatorTok{\textgreater{}} \DecValTok{0}\NormalTok{:}
+        \ControlFlowTok{break}
+\CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: acquisisce i parametri del test dall'utente (numero di
+elementi, range dei valori, limite per inc/dec) e genera la lista
+\texttt{numbers} di campioni casuali.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#\#\# DATA STRUCTURES }\AlertTok{\#\#\#}
+\NormalTok{structures }\OperatorTok{=}\NormalTok{ \{}
+    \StringTok{\textquotesingle{}maxHeap\textquotesingle{}}\NormalTok{: Heap(}\StringTok{"max"}\NormalTok{),}
+    \StringTok{\textquotesingle{}minHeap\textquotesingle{}}\NormalTok{: Heap(}\StringTok{"min"}\NormalTok{),}
+    \StringTok{\textquotesingle{}maxLinkedList\textquotesingle{}}\NormalTok{: LinkedList(}\StringTok{"max"}\NormalTok{),}
+    \StringTok{\textquotesingle{}minLinkedList\textquotesingle{}}\NormalTok{: LinkedList(}\StringTok{"min"}\NormalTok{),}
+    \StringTok{\textquotesingle{}maxLinkedOrderedList\textquotesingle{}}\NormalTok{: LinkedOrderedList(}\StringTok{"max"}\NormalTok{),}
+    \StringTok{\textquotesingle{}minLinkedOrderedList\textquotesingle{}}\NormalTok{: LinkedOrderedList(}\StringTok{"min"}\NormalTok{),}
+\NormalTok{\}}
+\CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: crea le istanze delle strutture che verranno testate (heap
+e liste, per max e min).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#\#\# OPERATIONS }\AlertTok{\#\#\#}
+\NormalTok{operations }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Insert\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}IncDec\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Extract\textquotesingle{}}\NormalTok{]}
+\CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: definisce la lista delle operazioni da cronometrare.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#\#\# TIMING LISTS }\AlertTok{\#\#\#}
+\NormalTok{timingLists }\OperatorTok{=}\NormalTok{ \{}
+    \SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{name}\SpecialCharTok{\}\{op\}}\SpecialStringTok{Times"}\NormalTok{: [] }\ControlFlowTok{for}\NormalTok{ name }\KeywordTok{in}\NormalTok{ structures }\ControlFlowTok{for}\NormalTok{ op }\KeywordTok{in}\NormalTok{ operations}
+\NormalTok{\}}
+
+\NormalTok{sumTimingLists }\OperatorTok{=}\NormalTok{ \{}
+    \SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{name}\SpecialCharTok{\}\{op\}}\SpecialStringTok{Times"}\NormalTok{: [] }\ControlFlowTok{for}\NormalTok{ name }\KeywordTok{in}\NormalTok{ structures }\ControlFlowTok{for}\NormalTok{ op }\KeywordTok{in}\NormalTok{ operations}
+\NormalTok{\}}
+\CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: inizializza i dizionari per memorizzare i tempi singoli e
+cumulativi per ogni struttura e operazione.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#\#\# insert }\AlertTok{\#\#\#}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Test insert:}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{i }\OperatorTok{=} \DecValTok{0}
+\ControlFlowTok{for}\NormalTok{ n }\KeywordTok{in}\NormalTok{ numbers:}
+    \ControlFlowTok{for}\NormalTok{ name, ds }\KeywordTok{in}\NormalTok{ structures.items():}
+\NormalTok{        i }\OperatorTok{+=} \DecValTok{1}
+\NormalTok{        start }\OperatorTok{=}\NormalTok{ time.time()}
+\NormalTok{        flag }\OperatorTok{=}\NormalTok{ ds.insert(n)}
+\NormalTok{        end }\OperatorTok{=}\NormalTok{ time.time()}
+\NormalTok{        elapsed }\OperatorTok{=}\NormalTok{ (end }\OperatorTok{{-}}\NormalTok{ start) }\OperatorTok{*} \DecValTok{1000} \CommentTok{\# s * 1000 = ms}
+\NormalTok{        timingLists[}\SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{name}\SpecialCharTok{\}}\SpecialStringTok{InsertTimes"}\NormalTok{].append(elapsed)}
+        \ControlFlowTok{if}\NormalTok{ flag }\OperatorTok{==} \VariableTok{False}\NormalTok{:}
+            \ControlFlowTok{raise}\NormalTok{(}\PreprocessorTok{Exception}\NormalTok{(}\SpecialStringTok{f""}\NormalTok{))}
+        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{name}\SpecialCharTok{\}}\SpecialStringTok{ {-}\textgreater{} inserito valore = }\SpecialCharTok{\{n\}}\SpecialStringTok{ iterazione = }\SpecialCharTok{\{i\}}\SpecialStringTok{ in }\SpecialCharTok{\{}\NormalTok{elapsed}\SpecialCharTok{\}}\SpecialStringTok{ms"}\NormalTok{)}
+\CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: ciclo di inserimento che inserisce ogni valore di
+\texttt{numbers} in tutte le strutture, misura il tempo e salva i tempi.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#\#\# incDecValue }\AlertTok{\#\#\#}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Test inc/dec valore:}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{i }\OperatorTok{=} \DecValTok{0}
+\ControlFlowTok{for}\NormalTok{ n }\KeywordTok{in}\NormalTok{ numbers:}
+    \ControlFlowTok{for}\NormalTok{ name, ds }\KeywordTok{in}\NormalTok{ structures.items():}
+\NormalTok{        i }\OperatorTok{+=} \DecValTok{1}
+\NormalTok{        randomIndex }\OperatorTok{=}\NormalTok{ random.randrange(}\DecValTok{0}\NormalTok{, numberSetSize)}
+\NormalTok{        randomValue }\OperatorTok{=}\NormalTok{ random.randrange(}\DecValTok{0}\NormalTok{, numberIncDecLimit)}
+        \ControlFlowTok{if}\NormalTok{ name[}\DecValTok{3}\NormalTok{:}\DecValTok{7}\NormalTok{] }\OperatorTok{==} \StringTok{"Heap"}\NormalTok{:}
+\NormalTok{            value }\OperatorTok{=}\NormalTok{ ds.getValue(randomIndex)}
+            \ControlFlowTok{if}\NormalTok{ name[}\DecValTok{0}\NormalTok{:}\DecValTok{3}\NormalTok{] }\OperatorTok{==} \StringTok{"max"}\NormalTok{:}
+\NormalTok{                value }\OperatorTok{+=}\NormalTok{ randomValue}
+            \ControlFlowTok{else}\NormalTok{:}
+\NormalTok{                value }\OperatorTok{{-}=}\NormalTok{ randomValue}
+        \ControlFlowTok{else}\NormalTok{:}
+\NormalTok{            value }\OperatorTok{=}\NormalTok{ randomValue}
+\NormalTok{        start }\OperatorTok{=}\NormalTok{ time.time()}
+\NormalTok{        flag }\OperatorTok{=}\NormalTok{ ds.incDecValue(randomIndex, value)}
+\NormalTok{        end }\OperatorTok{=}\NormalTok{ time.time()}
+        \ControlFlowTok{if}\NormalTok{ flag }\OperatorTok{==} \VariableTok{False}\NormalTok{:}
+            \ControlFlowTok{raise} \PreprocessorTok{Exception}\NormalTok{(}\SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{name}\SpecialCharTok{\}}\SpecialStringTok{ {-}\textgreater{} errore (iterazione }\SpecialCharTok{\{i\}}\SpecialStringTok{ nell\textquotesingle{}indice }\SpecialCharTok{\{}\NormalTok{randomIndex}\SpecialCharTok{\}}\SpecialStringTok{ fuori range, dimensione[}\SpecialCharTok{\{ds.}\NormalTok{size}\SpecialCharTok{\}}\SpecialStringTok{] o struttura vuota!"}\NormalTok{)}
+\NormalTok{        elapsed }\OperatorTok{=}\NormalTok{ (end }\OperatorTok{{-}}\NormalTok{ start) }\OperatorTok{*} \DecValTok{1000} \CommentTok{\# ms * 1000 = ms}
+\NormalTok{        timingLists[}\SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{name}\SpecialCharTok{\}}\SpecialStringTok{IncDecTimes"}\NormalTok{].append(elapsed)}
+        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{name}\SpecialCharTok{\}}\SpecialStringTok{ {-}\textgreater{} cambiato valore = }\SpecialCharTok{\{}\NormalTok{value}\SpecialCharTok{\}}\SpecialStringTok{ iterazione = }\SpecialCharTok{\{i\}}\SpecialStringTok{ in }\SpecialCharTok{\{}\NormalTok{elapsed}\SpecialCharTok{\}}\SpecialStringTok{ms"}\NormalTok{)}
+\CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: per ogni struttura sceglie un indice e un valore casuale;
+per gli heap modifica il valore coerentemente (aumenta per max,
+diminuisce per min), esegue \texttt{incDecValue} e registra il tempo.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#\#\# extract }\AlertTok{\#\#\#}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Test extract valori max/min:}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{i }\OperatorTok{=} \DecValTok{0}
+\ControlFlowTok{for}\NormalTok{ n }\KeywordTok{in}\NormalTok{ numbers:}
+    \ControlFlowTok{for}\NormalTok{ name,ds }\KeywordTok{in}\NormalTok{ structures.items():}
+\NormalTok{        i }\OperatorTok{+=} \DecValTok{1}
+\NormalTok{        start }\OperatorTok{=}\NormalTok{ time.time()}
+\NormalTok{        node }\OperatorTok{=}\NormalTok{ ds.extract()}
+\NormalTok{        end }\OperatorTok{=}\NormalTok{ time.time()}
+\NormalTok{        elapsed }\OperatorTok{=}\NormalTok{ (end }\OperatorTok{{-}}\NormalTok{ start) }\OperatorTok{*} \DecValTok{1000} \CommentTok{\# ms * 1000 = ms}
+\NormalTok{        timingLists[}\SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{name}\SpecialCharTok{\}}\SpecialStringTok{ExtractTimes"}\NormalTok{].append(elapsed)}
+        \ControlFlowTok{if}\NormalTok{ node }\KeywordTok{is} \VariableTok{None}\NormalTok{:}
+            \ControlFlowTok{raise} \PreprocessorTok{Exception}\NormalTok{(}\SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{name}\SpecialCharTok{\}}\SpecialStringTok{ {-}\textgreater{} errore durante l\textquotesingle{}estrazione }\SpecialCharTok{\{i\}}\SpecialStringTok{, la struttura è vuota!"}\NormalTok{)}
+        \ControlFlowTok{else}\NormalTok{:}
+            \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{name}\SpecialCharTok{\}}\SpecialStringTok{ {-}\textgreater{} estratto nodo }\SpecialCharTok{\{}\NormalTok{(node }\ControlFlowTok{if} \BuiltInTok{isinstance}\NormalTok{(node, }\BuiltInTok{int}\NormalTok{) }\ControlFlowTok{else}\NormalTok{ node.value)}\SpecialCharTok{\}}\SpecialStringTok{ iterazione = }\SpecialCharTok{\{i\}}\SpecialStringTok{ in }\SpecialCharTok{\{}\NormalTok{elapsed}\SpecialCharTok{\}}\SpecialStringTok{ms"}\NormalTok{)}
+\CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: esegue le estrazioni ripetute su ogni struttura, misura i
+tempi e verifica che l'estrazione sia avvenuta correttamente.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#\#\# CALCULATING THE TOTAL TIME PER ITERATION }\AlertTok{\#\#\#}
+\ControlFlowTok{for}\NormalTok{ op }\KeywordTok{in}\NormalTok{ operations:}
+    \ControlFlowTok{for}\NormalTok{ name, ds }\KeywordTok{in}\NormalTok{ structures.items():}
+\NormalTok{        prev }\OperatorTok{=} \DecValTok{0}
+        \ControlFlowTok{for}\NormalTok{ t }\KeywordTok{in}\NormalTok{ timingLists[}\SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{name}\SpecialCharTok{\}\{op\}}\SpecialStringTok{Times"}\NormalTok{]:}
+\NormalTok{            current }\OperatorTok{=}\NormalTok{ t }\CommentTok{\# copia per valore dato che int è una variabile immutabile}
+\NormalTok{            current }\OperatorTok{+=}\NormalTok{ prev}
+\NormalTok{            prev }\OperatorTok{=}\NormalTok{ current}
+\NormalTok{            sumTimingLists[}\SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{name}\SpecialCharTok{\}\{op\}}\SpecialStringTok{Times"}\NormalTok{].append(current)}
+\CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: costruisce i tempi cumulativi (somma progressiva) a partire
+dai tempi singoli per ogni struttura e operazione.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#\#\# SAVING CSV FILE }\AlertTok{\#\#\#}
+\CommentTok{\# IN THE "timingLists\_combaned.csv" file, format is the following \#}
+\CommentTok{\# LEFT TABLE {-}\textgreater{} SINGLE TIME TABLE \# }
+\CommentTok{\# RIGHT TABLE {-}\textgreater{} SUM TIME TABLE \#}
+\NormalTok{timing\_df }\OperatorTok{=}\NormalTok{ pd.DataFrame(timingLists)}
+\NormalTok{sum\_timing\_df }\OperatorTok{=}\NormalTok{ pd.DataFrame(sumTimingLists)}
+
+\NormalTok{max\_len }\OperatorTok{=} \BuiltInTok{max}\NormalTok{(}\BuiltInTok{len}\NormalTok{(timing\_df), }\BuiltInTok{len}\NormalTok{(sum\_timing\_df))}
+\NormalTok{timing\_df }\OperatorTok{=}\NormalTok{ timing\_df.reindex(}\BuiltInTok{range}\NormalTok{(max\_len))}
+\NormalTok{sum\_timing\_df }\OperatorTok{=}\NormalTok{ sum\_timing\_df.reindex(}\BuiltInTok{range}\NormalTok{(max\_len))}
+
+\NormalTok{timing\_df.insert(}\DecValTok{0}\NormalTok{, }\StringTok{"Iteration"}\NormalTok{, }\BuiltInTok{range}\NormalTok{(}\DecValTok{1}\NormalTok{, max\_len }\OperatorTok{+} \DecValTok{1}\NormalTok{))}
+\NormalTok{sum\_timing\_df.insert(}\DecValTok{0}\NormalTok{, }\StringTok{"Iteration"}\NormalTok{, }\BuiltInTok{range}\NormalTok{(}\DecValTok{1}\NormalTok{, max\_len }\OperatorTok{+} \DecValTok{1}\NormalTok{))}
+
+\NormalTok{blank\_col }\OperatorTok{=}\NormalTok{ pd.Series([}\StringTok{""}\NormalTok{] }\OperatorTok{*}\NormalTok{ max\_len, name}\OperatorTok{=}\StringTok{""}\NormalTok{)}
+
+\NormalTok{combined\_df }\OperatorTok{=}\NormalTok{ pd.concat(}
+\NormalTok{    [timing\_df, blank\_col, sum\_timing\_df.drop(columns}\OperatorTok{=}\StringTok{"Iteration"}\NormalTok{)],}
+\NormalTok{    axis}\OperatorTok{=}\DecValTok{1}
+\NormalTok{)}
+
+\NormalTok{combined\_df.to\_csv(}\StringTok{"tables/timingLists\_combined.csv"}\NormalTok{, index}\OperatorTok{=}\VariableTok{False}\NormalTok{)}
+\CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: converte i dizionari in DataFrame, li allinea e salva un
+file CSV combinato con tempi singoli e cumulativi.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#\#\# GRAPHS AND PLOTTING }\AlertTok{\#\#\#}
+\NormalTok{plt.style.use(}\StringTok{"dark\_background"}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{ op }\KeywordTok{in}\NormalTok{ operations:}
+\NormalTok{    plt.figure(figsize}\OperatorTok{=}\NormalTok{(}\DecValTok{10}\NormalTok{, }\DecValTok{6}\NormalTok{))}
+    \ControlFlowTok{for}\NormalTok{ name }\KeywordTok{in}\NormalTok{ structures:}
+\NormalTok{        times }\OperatorTok{=}\NormalTok{ sumTimingLists[}\SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{name}\SpecialCharTok{\}\{op\}}\SpecialStringTok{Times"}\NormalTok{]}
+\NormalTok{        plt.plot(times, label}\OperatorTok{=}\SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{name}\SpecialCharTok{\}}\SpecialStringTok{ }\SpecialCharTok{\{op\}}\SpecialStringTok{"}\NormalTok{)}
+\NormalTok{    plt.xlabel(}\StringTok{"Iterazioni"}\NormalTok{)}
+\NormalTok{    plt.ylabel(}\StringTok{"Tempo (ms)"}\NormalTok{)}
+\NormalTok{    plt.title(}\SpecialStringTok{f"Tempi totali di }\SpecialCharTok{\{op\}}\SpecialStringTok{ dati per ogni struttura"}\NormalTok{)}
+\NormalTok{    plt.legend()}
+\NormalTok{    plt.savefig(}\SpecialStringTok{f"graphs/}\SpecialCharTok{\{op\}}\SpecialStringTok{TotalTimes.png"}\NormalTok{)}
+\NormalTok{    plt.get\_current\_fig\_manager().set\_window\_title(}\SpecialStringTok{f"Grafico Tempi Totali"}\NormalTok{)}
+
+\ControlFlowTok{for}\NormalTok{ op }\KeywordTok{in}\NormalTok{ operations:}
+\NormalTok{    plt.figure(figsize}\OperatorTok{=}\NormalTok{(}\DecValTok{10}\NormalTok{, }\DecValTok{6}\NormalTok{))}
+    \ControlFlowTok{for}\NormalTok{ name }\KeywordTok{in}\NormalTok{ structures:}
+\NormalTok{        times }\OperatorTok{=}\NormalTok{ timingLists[}\SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{name}\SpecialCharTok{\}\{op\}}\SpecialStringTok{Times"}\NormalTok{]}
+\NormalTok{        plt.bar(}\BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(times)), times, label}\OperatorTok{=}\SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{name}\SpecialCharTok{\}}\SpecialStringTok{ }\SpecialCharTok{\{op\}}\SpecialStringTok{"}\NormalTok{, alpha}\OperatorTok{=}\FloatTok{0.7}\NormalTok{, width}\OperatorTok{=}\DecValTok{1}\NormalTok{)}
+\NormalTok{    plt.xlabel(}\StringTok{"Iterazioni"}\NormalTok{)}
+\NormalTok{    plt.ylabel(}\StringTok{"Tempo (ms)"}\NormalTok{)}
+\NormalTok{    plt.title(}\SpecialStringTok{f"Tempi singoli di }\SpecialCharTok{\{op\}}\SpecialStringTok{ dati per ogni struttura"}\NormalTok{)}
+\NormalTok{    plt.legend()}
+\NormalTok{    plt.savefig(}\SpecialStringTok{f"graphs/}\SpecialCharTok{\{op\}}\SpecialStringTok{SingleTimes.png"}\NormalTok{)}
+\NormalTok{    plt.get\_current\_fig\_manager().set\_window\_title(}\SpecialStringTok{f"Grafico Tempi Singoli"}\NormalTok{)}
+
+\NormalTok{plt.show()}
+\CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\end{Highlighting}
+\end{Shaded}
+
+Spiegazione: genera e salva i grafici (linee per tempi cumulativi e
+barre per tempi singoli) e mostra le figure.
+
+    
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
